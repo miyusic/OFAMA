@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -78,6 +79,11 @@ namespace OFAMA.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [DataType(DataType.Text)]
+            [Display(Name="UserName")]
+            public string UserName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -101,12 +107,6 @@ namespace OFAMA.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            //追加 11.25
-            [Required]
-            public string Name { get; set; }
-            public string Status { get; set; }
-            public string Authority { get; set; }
-            //
         }
 
 
@@ -123,16 +123,15 @@ namespace OFAMA.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = CreateUser();
-                var user = new ApplicationUser
+                var user = new ApplicationUser 
                 {
-                    Email = Input.Email,
-                    Name = Input.Name,
-                    Status = Input.Status,
-                    Authority=Input.Authority
+                    UserName = Input.UserName,
+                    Email = Input.Email
                 };
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                Console.WriteLine(Input.UserName);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
