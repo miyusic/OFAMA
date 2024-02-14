@@ -15,5 +15,8 @@ namespace OFAMA.Models
         public string? Status { get; set; }
         [PersonalData]
         public string? Authority { get; set; }
+
+        //[ConcurrencyCheck]
+        //public Guid Version { get; set; }
     }
 }

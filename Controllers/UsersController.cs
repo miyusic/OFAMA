@@ -6,12 +6,13 @@ using System.Net;
 using System.ComponentModel.DataAnnotations;
 using OFAMA.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNet.Identity;
 
 namespace OFAMA.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private  ApplicationDbContext _context;
 
         public UsersController(ApplicationDbContext context)
         {
@@ -64,6 +65,45 @@ namespace OFAMA.Controllers
             return View(applicationuser);
         }
         
+        /*
+        public async Task<IActionResult>Edit(string id)
+        {
+            if (id == null) {
+            return NotFound();
+            }
+            var target = await _context.ApplicationUser.FindAsync(id);
+
+            if (target == null)
+            {
+                return NotFound();
+            }
+            UserEdit model = new UserEdit() { Email = target.Email };
+            return View(model);
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult>Edit(string id, UserEdit model)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var target = await _context.ApplicationUser.FindAsync(id);
+                target.Email=model.Email;
+                target.UserName=model.UserName;
+                target.Status=model.Status;
+                target.Authority=model.Authority;
+                var resultUpdate =_context.Update(target);
+                
+            }
+            return View(model);
+        }
+        */
+        
         //Get: Users/Edit/5
         public async Task<IActionResult> Edit(string? id)
         {
@@ -81,21 +121,56 @@ namespace OFAMA.Controllers
         //Post:Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("UserName,Email,Status,Authority")] ApplicationUser applicationuser)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,UserName,Email,Status,Authority")]ApplicationUser applicationuser)
         {
-            if (id !=applicationuser.Id)
+
+            if (string.Compare(id,applicationuser.Id,true)!=0)
             {
+                
                 return NotFound();
             }
+            
             if (ModelState.IsValid)
             {
+                Console.WriteLine("kokomadeOK");
+                Console.WriteLine(id);
+                Console.WriteLine(applicationuser.Id);
+                var saved = false;
                 try
                 {
+
+                    //applicationuser.Version = Guid.NewGuid();
                     _context.Update(applicationuser);
+
                     await _context.SaveChangesAsync();
+                    saved = true;
                 }
-                catch(DbUpdateConcurrencyException)
+                catch(DbUpdateConcurrencyException ex)
                 {
+                    foreach(var entry in ex.Entries)
+                    {
+                        if(entry.Entity is ApplicationUser)
+                        {
+                            var proposedValues = entry.CurrentValues;
+                            var databaseValues = entry.GetDatabaseValues();
+                            Console.WriteLine("kokomadeOK");
+
+
+                            foreach(var property in proposedValues.Properties)
+                            {
+                                var proposedValue = proposedValues[property];
+                                var databaseValue = proposedValues[property];
+
+                                proposedValues[property] = databaseValue;
+                            }
+                            entry.OriginalValues.SetValues(databaseValues);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException(
+                                "Don't know how to handle concurrency conflicts for");
+                        }
+                    }
                     if(!ApplicationUserExists(applicationuser.Id))
                     {
                         
@@ -103,6 +178,7 @@ namespace OFAMA.Controllers
                     }
                     else
                     {
+                        
                         throw;
                     }
                 }
@@ -111,6 +187,7 @@ namespace OFAMA.Controllers
             }
             return View(applicationuser);
         }
+        
 
         //Get:Users/Delete/5
         public async Task<IActionResult> Delete(string? id)

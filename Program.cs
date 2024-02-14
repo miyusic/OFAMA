@@ -24,6 +24,8 @@ builder.Services.AddScoped<IEmailSender, MailSender>();
 //
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    //追記2/8
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 //追記
 builder.Services.AddRazorPages();
