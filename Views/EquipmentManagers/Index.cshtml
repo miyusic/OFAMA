@@ -1,0 +1,73 @@
+﻿@model OFAMA.Models.EquipmentManagerViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<h2><a asp-area="" asp-controller="Equipments" asp-action="Index">備品メニュー</a></h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="EquipmentManagers" asp-action="Index" method="get">
+    <p>
+        日付検索: <input asp-for="StartDate" class="form-control"  />
+        <input asp-for="EndDate" class="form-control"  />
+        <input type="text" asp-for="SearchString" />
+        <input type="submit" value="検索" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ユーザ名
+            </th>
+            <th>
+                備品名
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentManagers[0].Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentManagers[0].Created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentManagers[0].Updated_at)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.EquipmentManagers) {
+        <tr><td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+            @{
+                // EquipIdに対応するItemNameを取得する
+                var itemName = ViewBag.EquipDictionary[item.EquipId];
+            }
+            @itemName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_at)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

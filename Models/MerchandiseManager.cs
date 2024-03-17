@@ -1,0 +1,25 @@
+﻿using System.ComponentModel;
+
+namespace OFAMA.Models
+{
+    public class MerchandiseManager
+    {
+        [DisplayName("データID")]
+        public int Id { get; set; }
+
+        [DisplayName("商品ID")]
+        public int MerchId { get; set; }
+
+        [DisplayName("ユーザID")]
+        public int UserId { get; set; }
+
+        [DisplayName("数量")]
+        public int Amount { get; set; }
+
+        [DisplayName("作成日")]
+        public DateTime Created_at { get; set; }
+
+        [DisplayName("更新日")]
+        public DateTime Updated_at { get; set; }
+    }
+}

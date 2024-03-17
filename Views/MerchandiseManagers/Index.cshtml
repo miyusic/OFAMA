@@ -1,0 +1,60 @@
+﻿@model IEnumerable<OFAMA.Models.MerchandiseManager>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<h2><a asp-area="" asp-controller="Merchandises" asp-action="Index">商品メニュー</a></h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                商品名
+            </th>
+            <th>
+                ユーザ名
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updated_at)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MerchId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_at)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
