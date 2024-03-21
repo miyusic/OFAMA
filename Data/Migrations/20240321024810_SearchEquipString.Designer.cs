@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OFAMA.Data;
 
@@ -11,9 +12,10 @@ using OFAMA.Data;
 namespace OFAMA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321024810_SearchEquipString")]
+    partial class SearchEquipString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,9 +272,8 @@ namespace OFAMA.Data.Migrations
                     b.Property<DateTime>("Updated_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -287,9 +288,6 @@ namespace OFAMA.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Created_at")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("Created_yaer")
                         .HasColumnType("datetime2");
 
@@ -302,9 +300,6 @@ namespace OFAMA.Data.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Updated_at")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -331,9 +326,8 @@ namespace OFAMA.Data.Migrations
                     b.Property<DateTime>("Updated_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

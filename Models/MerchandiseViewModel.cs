@@ -2,7 +2,7 @@
 
 namespace OFAMA.Models
 {
-    public class MerchandiseIndexViewModel
+    public class MerchandiseViewModel
     {
         public List<Merchandise>? Merchandises { get; set; }
         public SelectList? Kinds { get; set; }

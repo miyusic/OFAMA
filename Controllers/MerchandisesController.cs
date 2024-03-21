@@ -52,7 +52,7 @@ namespace OFAMA.Controllers
                 merchs = merchs.Where(s => s.Created_yaer.Year == int.Parse(merchYear));
             }
 
-            var MerchandiseVM = new MerchandiseIndexViewModel
+            var MerchandiseVM = new MerchandiseViewModel
             {
                 Merchandises = await merchs.ToListAsync(),
                 Kinds = new SelectList(await kindsQuery.Distinct().ToListAsync()),
@@ -98,6 +98,9 @@ namespace OFAMA.Controllers
         {
             if (ModelState.IsValid)
             {
+                var now_date = DateTime.Now;
+                merchandise.Updated_at = now_date;
+                merchandise.Created_at = now_date;
                 _context.Add(merchandise);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -126,7 +129,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,Price,Kind,Created_yaer")] Merchandise merchandise)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,Price,Kind,Created_yaer,Created_at")] Merchandise merchandise)
         {
             if (id != merchandise.Id)
             {
@@ -137,6 +140,8 @@ namespace OFAMA.Controllers
             {
                 try
                 {
+                    var update_date = DateTime.Now;
+                    merchandise.Updated_at = update_date;
                     _context.Update(merchandise);
                     await _context.SaveChangesAsync();
                 }

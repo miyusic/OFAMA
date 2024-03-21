@@ -11,7 +11,7 @@ namespace OFAMA.Models
         public int MerchId { get; set; }
 
         [DisplayName("ユーザID")]
-        public int UserId { get; set; }
+        public String UserId { get; set; }
 
         [DisplayName("数量")]
         public int Amount { get; set; }

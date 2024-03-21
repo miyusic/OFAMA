@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OFAMA.Models.MerchandiseManager>
+﻿@model OFAMA.Models.MerchandiseManagerViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,35 +10,59 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<form asp-controller="MerchandiseManagers" asp-action="Index" method="get">
+    <p>
+        
+        作成日検索: <input　type="date" asp-for="StartDate" class="form-control"  />
+        <input　type="date" asp-for="EndDate" class="form-control"  />
+        ユーザ検索:<input type="text" asp-for="SearchNameString" />
+        商品名検索:<input type="text" asp-for="SearchMerchString" />
+        <input type="submit" value="検索" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                商品名
-            </th>
-            <th>
                 ユーザ名
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                商品名
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Created_at)
+                @Html.DisplayNameFor(model => model.MerchManagers[0].Amount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Updated_at)
+                @Html.DisplayNameFor(model => model.MerchManagers[0].Created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MerchManagers[0].Updated_at)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.MerchManagers) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.MerchId)
+                @{
+                // EquipIdに対応するItemNameを取得する
+                //var userName = item.UserId;
+                var userName = ViewBag.UserDictionary[(item.UserId)];
+                }
+                @userName
+                <!--@Html.DisplayFor(modelItem => item.UserId)-->
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
+                @{
+                    // MerchIdに対応するItemNameを取得する
+                    var itemName = ViewBag.MerchDictionary[item.MerchId];
+                }
+                @itemName
+                <!--@Html.DisplayFor(modelItem => item.MerchId)-->
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
@@ -51,10 +75,11 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <!--<a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

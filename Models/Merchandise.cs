@@ -25,5 +25,11 @@ namespace OFAMA.Models
         [DisplayName("制作年")]
         [DataType(DataType.Date)]
         public DateTime Created_yaer { get; set; }
+
+        [DisplayName("作成日")]
+        public DateTime Created_at { get; set; }
+
+        [DisplayName("最終更新日")]
+        public DateTime Updated_at { get; set; }
     }
 }

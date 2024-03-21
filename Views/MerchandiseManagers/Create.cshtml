@@ -19,7 +19,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
+                <!--<input asp-for="UserId" class="form-control" />-->
+                <select asp-for="UserId" asp-items="@(ViewBag.Users)" class="form-control"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,6 +28,7 @@
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
+            <!--
             <div class="form-group">
                 <label asp-for="Created_at" class="control-label"></label>
                 <input asp-for="Created_at" class="form-control" />
@@ -37,6 +39,7 @@
                 <input asp-for="Updated_at" class="form-control" />
                 <span asp-validation-for="Updated_at" class="text-danger"></span>
             </div>
+            -->
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

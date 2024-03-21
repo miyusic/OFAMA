@@ -1,4 +1,4 @@
-﻿@model  OFAMA.Models.MerchandiseIndexViewModel
+﻿@model  OFAMA.Models.MerchandiseViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -42,6 +42,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Merchandises[0].Created_yaer)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Merchandises[0].Created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Merchandises[0].Updated_at)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -61,8 +67,14 @@
                 @Html.DisplayFor(modelItem => item.Created_yaer)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Created_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_at)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <!--<a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

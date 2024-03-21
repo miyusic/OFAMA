@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,22 +15,51 @@ namespace OFAMA.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public EquipmentManagersController(ApplicationDbContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public EquipmentManagersController(UserManager<IdentityUser> userManager,ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: EquipmentManagers
-        public async Task<IActionResult> Index(string searchString,int equipId,DateTime? startDate,DateTime? endDate)
+        public async Task<IActionResult> Index(string searchNameString,string searchEquipString, DateTime? startDate,DateTime? endDate)
         {
             //データのリスト
             var equipMngs = _context.EquipmentManager.Select(m => m);
+            //var equips = _context.Equipment.Select(m => m);
+
+
+            //EquipIdのクエリ
             var equipidQuery = _context.EquipmentManager
                 .OrderBy(m => m.EquipId)
                 .Select(m => m.EquipId);
 
+            //抽出したEquipIdに対応するEquipNameを取ってくる
+            var equipNameQuery = _context.Equipment
+                .Join(equipidQuery,
+                equip => equip.Id,
+                equipid => equipid,
+                (equip,equipid)=> new 
+                {
+                    EquipId = equip.Id,
+                    ItemName = equip.ItemName
+                }).Select(x => new {x.EquipId, x.ItemName}).OrderBy(x => x.ItemName);
+
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+            
+
+            var userDictionary = _userManager.Users.ToDictionary(e => e.Id);
+            // ViewBagに辞書を設定
+            ViewBag.UserDictionary = userDictionary;
+
             //中身のデータをリストに格納
-            var eqipList = _context.EquipmentManager.ToList();
+            //var eqipList = _context.EquipmentManager.ToList();
             // 辞書の作成
             var equipDictionary = _context.Equipment.ToDictionary(e => e.Id, e => e.ItemName);
 
@@ -45,8 +75,8 @@ namespace OFAMA.Controllers
                 //equipmentManager.EquipmentItemName = equipment?.ItemName;
             }*/
 
-            // タイトル検索処理
-            if (!string.IsNullOrEmpty(searchString))
+            // ユーザ名検索処理
+            if (!string.IsNullOrEmpty(searchNameString))
             {
                 /*
                 foreach (KeyValuePair<int, string> kvp in equipDictionary)
@@ -59,8 +89,24 @@ namespace OFAMA.Controllers
                     }
                 }
                 */
-                // タイトルに検索文字列が含まれるデータを抽出する
-                equipMngs = equipMngs.Where(s => s.EquipId == equipId);
+                // 名前に検索文字列が含まれるデータを抽出する
+                
+                equipMngs = equipMngs
+                    .Join
+                    (
+                        _userManager.Users,
+                        equipmentManager => equipmentManager.UserId,
+                        user => user.Id,
+                        (equipmentManager, user) => new
+                        {
+                            EquipmentManager = equipmentManager,
+                            UserName = user.UserName
+                        }
+                    )
+                    .Where(joinResult => joinResult.UserName.Contains(searchNameString))
+                    .Select(joinResult => joinResult.EquipmentManager);
+
+                //equipMngs = equipMngs;
             }
 
             //日付での絞り込み
@@ -74,10 +120,34 @@ namespace OFAMA.Controllers
                 equipMngs = equipMngs.Where(m => m.Created_at <= endDate);
             }
 
+            //備品名検索
+            if (!string.IsNullOrEmpty(searchEquipString))
+            {
+                //備品リストから備品Idと備品名を取ってくる
+                /*var equips = _context.Equipment
+                    .Where(s => s.ItemName.Contains(searchEquipString))
+                    .Select(s=> new {s.Id,s.ItemName});*/
+
+                equipMngs = equipMngs
+                    .Join
+                    (
+                        _context.Equipment,
+                        equipmentManager => equipmentManager.EquipId,
+                        equipment => equipment.Id,
+                        (equipmentManager, equipment) => new
+                        {
+                            EquipmentManager = equipmentManager,
+                            ItemName = equipment.ItemName
+                        }
+                    )
+                    .Where(joinResult => joinResult.ItemName.Contains(searchEquipString))
+                    .Select(joinResult => joinResult.EquipmentManager);
+            }
+
             var equipMngVM = new EquipmentManagerViewModel
             {
+                EquipIds = new SelectList(await equipNameQuery.Distinct().ToListAsync()),
                 EquipmentManagers = await equipMngs.ToListAsync()
-
             };
 
             return _context.EquipmentManager != null ? 
@@ -106,8 +176,16 @@ namespace OFAMA.Controllers
         // GET: EquipmentManagers/Create
         public IActionResult Create()
         {
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
             //テーブルから全てのデータを取得するLINQクエリ
-            var equips = _context.Equipment.Select(m => new { m.Id ,m.ItemName});
+            var equips = _context.Equipment
+                .Select(m => new { m.Id ,m.ItemName})
+                .OrderBy(user => user.ItemName);
             ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
             ViewBag.Today =  DateTime.Today;
             return View();
@@ -118,7 +196,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EquipId,UserId,Amount,Created_at,Updated_at")] EquipmentManager equipmentManager)
+        public async Task<IActionResult> Create([Bind("Id,EquipId,UserId,Amount,Created_at")] EquipmentManager equipmentManager)
         {
             if (ModelState.IsValid)
             {
@@ -135,8 +213,16 @@ namespace OFAMA.Controllers
         // GET: EquipmentManagers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
             //テーブルから全てのデータを取得するLINQクエリ
-            var equips = _context.Equipment.Select(m => new { m.Id, m.ItemName });
+            var equips = _context.Equipment
+                .Select(m => new { m.Id, m.ItemName })
+                .OrderBy(user => user.ItemName);
             ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
             if (id == null || _context.EquipmentManager == null)
             {
@@ -156,7 +242,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EquipId,UserId,Amount,Created_at,Updated_at")] EquipmentManager equipmentManager)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EquipId,UserId,Amount,Created_at")] EquipmentManager equipmentManager)
         {
             if (id != equipmentManager.Id)
             {
