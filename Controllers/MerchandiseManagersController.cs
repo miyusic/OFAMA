@@ -175,13 +175,13 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MerchId,UserId,Amount")] MerchandiseManager merchandiseManager)
+        public async Task<IActionResult> Create([Bind("Id,MerchId,UserId,Amount,Created_at")] MerchandiseManager merchandiseManager)
         {
             if (ModelState.IsValid)
             {
                 var now_date = DateTime.Now;
                 merchandiseManager.Updated_at = now_date;
-                merchandiseManager.Created_at = now_date;
+                //merchandiseManager.Created_at = now_date;
                 _context.Add(merchandiseManager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

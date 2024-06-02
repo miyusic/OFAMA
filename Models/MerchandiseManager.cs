@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace OFAMA.Models
 {
@@ -17,6 +18,7 @@ namespace OFAMA.Models
         public int Amount { get; set; }
 
         [DisplayName("作成日")]
+        [DataType(DataType.Date)]
         public DateTime Created_at { get; set; }
 
         [DisplayName("更新日")]

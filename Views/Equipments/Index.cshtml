@@ -12,7 +12,7 @@
 
 <form asp-controller="Equipments" asp-action="Index" method="get">
     <p>
-        <select asp-for="EquipmentExpandable" asp-items="Model.Expandables">
+        <select asp-for="SearchExpandableString" asp-items="Model.Expandables">
             <option value="">全て</option>
         </select>
         備品名検索: <input type="text" name="SearchString" />

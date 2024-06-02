@@ -6,7 +6,7 @@ namespace OFAMA.Models
     {
         public List<Equipment>? Equipments { get; set; }
         public SelectList? Expandables { get; set; }
-        public string? EquipmentExpandable { get; set; }
+        public string? SearchExpandableString { get; set; }
         public string? SearchString { get; set; }
 
     }

@@ -202,7 +202,7 @@ namespace OFAMA.Controllers
             {
                 var now_date = DateTime.Now;
                 equipmentManager.Updated_at = now_date;
-                equipmentManager.Created_at = now_date;
+                //equipmentManager.Created_at = now_date;
                 _context.Add(equipmentManager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

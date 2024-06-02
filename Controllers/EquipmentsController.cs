@@ -21,7 +21,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Equipments
-        public async Task<IActionResult> Index(string searchString,string expandableString)
+        public async Task<IActionResult> Index(string searchExpandableString, string searchString)
         {
             //テーブルから全てのデータを取得するLINQクエリ
             var equips = _context.Equipment.Select(m => m);
@@ -36,16 +36,16 @@ namespace OFAMA.Controllers
                 equips = equips.Where(s => s.ItemName!.Contains(searchString));
             }
 
-            Console.WriteLine(expandableString);
+            //Console.WriteLine(searchExpandableString);
             //消耗品かの絞り込み
-            if (!string.IsNullOrEmpty(expandableString))
+            if (!string.IsNullOrEmpty(searchExpandableString))
             {
-                if (expandableString.Equals("消耗品"))
+                if (searchExpandableString.Equals("消耗品"))
                 {
                     //消耗品のとき
                     equips = equips.Where(s => s.isExpandable!.Equals(true));
                 }
-                else if (expandableString.Equals("消耗品ではない"))
+                else if (searchExpandableString.Equals("消耗品ではない"))
                 {
                     //消耗品ではないとき
                     equips = equips.Where(s => s.isExpandable!.Equals(false));
