@@ -25,28 +25,34 @@ namespace OFAMA.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly Keyword _keyword;
+        
         public RegisterModel(
-            UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            IUserStore<IdentityUser> userStore,
+            SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender
+            //0427追加(削除済み)
+            
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
             //変更 11.25
-            _emailStore = (IUserEmailStore<ApplicationUser>)GetEmailStore();
+            _emailStore = (IUserEmailStore<IdentityUser>)GetEmailStore();
             //
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            //0427(削除済み)
+            
         }
 
         /// <summary>
@@ -107,6 +113,14 @@ namespace OFAMA.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            //0427追加
+            /*
+            [DataType(DataType.Text)]
+            [Display(Name = "事前パスワード")]
+            [Compare("asd",ErrorMessage = "WrongKeyWord")]
+            public string Keyword { get; set; }
+            */
+
         }
 
 
@@ -123,7 +137,7 @@ namespace OFAMA.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = CreateUser();
-                var user = new ApplicationUser 
+                var user = new IdentityUser 
                 {
                     UserName = Input.UserName,
                     Email = Input.Email
@@ -170,11 +184,11 @@ namespace OFAMA.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private Microsoft.AspNetCore.Identity.IdentityUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<Microsoft.AspNetCore.Identity.IdentityUser>();
             }
             catch
             {
@@ -184,13 +198,13 @@ namespace OFAMA.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<ApplicationUser> GetEmailStore()
+        private IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<ApplicationUser>)_userStore;
+            return (IUserEmailStore<IdentityUser>)_userStore;
         }
     }
 }

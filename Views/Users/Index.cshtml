@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OFAMA.Models.ApplicationUser>
+﻿@model IEnumerable<OFAMA.Models.UserViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,7 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div style="text-align:center">
 <table class="table">
     <thead>
         <tr>
@@ -19,17 +17,23 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
             </th>
+                
             <th>
-                @Html.DisplayNameFor(model => model.Authority)
+                @Html.DisplayNameFor(model => model.UserRoles)
             </th>
+                <th></th>
             <th></th>
+                
+                <th></th>
         </tr>
     </thead>
+    
     <tbody>
         @foreach (var item in Model)
         {
+            
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
@@ -37,18 +41,31 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
+                
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
                 </td>
+                
+                @for (int i = 0; i < item.UserRoles.Count; i++)
+                {
+                    <td>
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
+
+                    </td>
+                }
+                
+                
+  
                 <td>
-                    @Html.DisplayFor(modelItem => item.Authority)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">ChangePassword</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-controller="Role" asp-action="EditRoleAssignment" asp-route-id="@item.Id">AddStatus</a>
                 </td>
             </tr>
+            
         }
     </tbody>
+    
 </table>
+</div>

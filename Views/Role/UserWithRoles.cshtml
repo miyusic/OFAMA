@@ -1,0 +1,54 @@
+﻿@model IEnumerable<OFAMA.Models.UserWithRoleInfo>
+
+@{
+    ViewData["Title"] = "UserWithRoles";
+}
+
+<h1>UserWithRoles</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles)
+            </th>
+            
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserEmail)
+            </td>
+                
+                    @for (int i = 0; i < item.UserRoles.Count; i++)
+                    {
+                    <td>
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
+                        
+                    </td>
+                    }
+                
+                
+            <td>
+                    <a asp-action="EditRoleAssignment" asp-route-id="@item.UserId">Edit</a>
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

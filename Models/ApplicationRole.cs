@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity;
 using OFAMA.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
+/*
 namespace OFAMA.Models
 {
     public class ApplicationRole:IdentityRole
@@ -38,3 +38,4 @@ namespace OFAMA.Models
     }
 
 }
+*/

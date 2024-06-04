@@ -6,45 +6,90 @@ using System.Net;
 using System.ComponentModel.DataAnnotations;
 using OFAMA.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNet.Identity;
+
 
 namespace OFAMA.Controllers
 {
     public class UsersController : Controller
     {
-        private  ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         //1.10追加
         //Get
         public async Task<IActionResult> Index()
         {
-            return _context.ApplicationUser != null ?
-                View(await _context.ApplicationUser.ToListAsync()) :
-                Problem("Entity set 'ApplicationUserContext' is null");
+            var model = new List<UserViewModel>();
+
+            // ToListAsync() を付与してここで DB からデータを取得して
+            // DataReader を閉じておかないと、下の IsInRole メソッド
+            // でエラーになるので注意
+            var users = await _userManager.Users.
+                        OrderBy(user => user.UserName).ToListAsync();
+            var roles = await _roleManager.Roles.
+                        OrderBy(role => role.Name).ToListAsync();
+
+            foreach (IdentityUser user in users)
+            {
+                var info = new UserViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+
+                };
+
+                foreach (IdentityRole role in roles)
+                {
+                    RoleInfo roleInfo = new RoleInfo();
+                    roleInfo.RoleName = role.Name;
+                    roleInfo.IsInThisRole = await _userManager.
+                                            IsInRoleAsync(user, role.Name);
+                    info.UserRoles.Add(roleInfo);
+                }
+                model.Add(info);
+            }
+
+            return View(model);
+
+            
         }
 
         //Get:Users/Details/5
         //もともとはDetails(int ? id)だった
+        /*
         public async Task<IActionResult> Details(string? id)
         {
-            if (id == null || _context.ApplicationUser == null)
+            if (id == null )
             {
                 return NotFound();
             }
-            var user = await _context.ApplicationUser.FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+            var model =new UserModel
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                
+            };
+            return View(model);
         }
+        */
 
         //Get:USers/Create
+        /*
         public IActionResult Create()
         {
             return View();
@@ -53,18 +98,199 @@ namespace OFAMA.Controllers
         //POST:Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserName,Email,Status,Authority")]ApplicationUser applicationuser)
+        public async Task<IActionResult> Create([Bind("UserName,Email,Password,ConfirmPassWord")]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(applicationuser);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = new IdentityUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    EmailConfirmed = true
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "User");
+                }
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
 
             }
-            return View(applicationuser);
+            return View(model);
+        }
+        */
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var target = await _userManager.FindByIdAsync(id);
+
+            if (target == null)
+            {
+                return NotFound();
+            }
+
+            EditViewModel model = new EditViewModel()
+            {
+                UserName = target.UserName
+            };
+
+            return View(model);
         }
         
+
+        // POST: User/Edit/5
+        // UserName をソルトに使っていてパスワードだけもしくは
+        // UserName だけを更新するのは NG かと思っていたが問題
+        // なかった。（実際どのように対処しているかは不明）
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id,
+            [Bind("UserName,Email,Password,ConfirmPassword,Status,Authority")] EditViewModel model)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var target = await _userManager.FindByIdAsync(id);
+                if (target == null)
+                {
+                    return NotFound();
+                }
+                target.UserName = model.UserName;
+                //target.Email = model.Email;
+                
+                
+
+
+                // 新パスワードを入力した場合はパスワードも更新する
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    // MVC5 と違って PasswordValidator プロパティはない
+                    // PasswordValidators で IList<IPasswordValidator<TUser>>
+                    // を取得できる。PasswordValidators[0] で検証可能
+                    // （ホントにそれで良いのかどうかは分からないが）
+                    // ValidateAsync メソッドの引数は MVC5 と違うので注意
+                    var resultPassword = await _userManager.PasswordValidators[0].
+                        ValidateAsync(_userManager, target, model.Password);
+
+                    if (resultPassword.Succeeded)
+                    {
+                        // 検証 OK の場合、入力パスワードをハッシュ。
+                        // HashPassword メソッドの引数は MVC5 とは異なる
+                        var hashedPassword = _userManager.PasswordHasher.
+                            HashPassword(target, model.Password);
+                        target.PasswordHash = hashedPassword;
+                    }
+                    else
+                    {
+                        // 検証 NG の場合 ModelSate にエラー情報を
+                        // 追加して編集画面を再描画
+                        // Register.cshtml.cs のものをコピー
+                        foreach (var error in resultPassword.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return View(model);
+                    }
+                }
+
+                var resultUpdate = await _userManager.UpdateAsync(target);
+
+                if (resultUpdate.Succeeded)
+                {
+                    // 更新に成功したら User/Index にリダイレクト
+                    return RedirectToAction("Index", "Users");
+                }
+                // Register.cshtml.cs のものをコピー
+                foreach (var error in resultUpdate.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            // 更新に失敗した場合、編集画面を再描画
+            return View(model);
+        }
+
+        // GET: User/Delete/5
+        // Model は UserModel
+        // 階層更新が行われているようでロールがアサインされている
+        // ユーザーも削除可
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var u = await _userManager.FindByIdAsync(id);
+
+            if (u == null)
+            {
+                return NotFound();
+            }
+
+            var model = new UserModel
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Email = u.Email,
+                EmailConfirmed = u.EmailConfirmed,
+                
+            };
+
+            return View(model);
+        }
+
+        // POST: User/Delete/5
+        // 上の Delete(string id) と同シグネチャのメソッドは
+        // 定義できないので、メソッド名を変えて、下のように
+        // ActionName("Delete") を設定する
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var target = await _userManager.FindByIdAsync(id);
+
+            if (target == null)
+            {
+                return NotFound();
+            }
+
+            // ロールがアサインされているユーザーも以下の一行
+            // で削除可能。内部で階層更新が行われているらしい。
+            var result = await _userManager.DeleteAsync(target);
+
+            if (result.Succeeded)
+            {
+                // 削除に成功したら User/Index にリダイレクト
+                return RedirectToAction("Index", "Users");
+            }
+
+            // Register.cshtml.cs のものをコピー
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(target);
+        }
         /*
         public async Task<IActionResult>Edit(string id)
         {
@@ -103,7 +329,8 @@ namespace OFAMA.Controllers
             return View(model);
         }
         */
-        
+
+        /*
         //Get: Users/Edit/5
         public async Task<IActionResult> Edit(string? id)
         {
@@ -226,6 +453,7 @@ namespace OFAMA.Controllers
         {
             return (_context.ApplicationUser?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        */
     }
 }
 

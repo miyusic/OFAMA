@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OFAMA.Models;
 
@@ -13,6 +14,12 @@ namespace OFAMA.Data
         {
             base.OnModelCreating(builder);
         }
-        public DbSet<OFAMA.Models.ApplicationUser> ApplicationUser { get; set; } = default!;
+        public DbSet<IdentityUser> identityUser { get; set; } = default!;
+        public DbSet<OFAMA.Models.UserModel>? UserModel { get; set; }
+        public DbSet<OFAMA.Models.RegisterViewModel>? RegisterViewModel { get; set; }
+        public DbSet<OFAMA.Models.EditViewModel>? EditViewModel { get; set; }
+        public DbSet<OFAMA.Models.RoleModel>? RoleModel { get; set; }
+        public DbSet<OFAMA.Models.UserWithRoleInfo>? UserWithRoleInfo { get; set; }
+        public DbSet<OFAMA.Models.Keyword>? Keyword { get; set; }
     }
 }
