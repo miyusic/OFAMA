@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OFAMA.Areas.Identity.Pages.Account;
 using OFAMA.Data;
-using OFAMA.Models;
 
 namespace OFAMA.Controllers
 {
@@ -22,11 +22,12 @@ namespace OFAMA.Controllers
         // GET: Keywords
         public async Task<IActionResult> Index()
         {
-              return _context.Keyword != null ? 
-                          View(await _context.Keyword.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Keyword'  is null.");
+            return _context.Keyword != null ?
+                        View(await _context.Keyword.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Keyword'  is null.");
         }
 
+        /*
         // GET: Keywords/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -45,6 +46,8 @@ namespace OFAMA.Controllers
             return View(keyword);
         }
 
+        */
+        
         // GET: Keywords/Create
         public IActionResult Create()
         {
@@ -56,17 +59,25 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,keyword")] Keyword keyword)
+        public async Task<IActionResult> Create([Bind("Id,Keyword")] KeywordModel _keyword)
         {
-            if (ModelState.IsValid)
+            if (!_context.Keyword.Any())
             {
-                _context.Add(keyword);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(_keyword);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View(keyword);
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Keyword is already exist");
+                //throw new InvalidOperationException($"Keyword is already exist ");
+            }
+            return View(_keyword);
         }
-
+        
         // GET: Keywords/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -88,9 +99,9 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,keyword")] Keyword keyword)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Keyword")] KeywordModel _keyword)
         {
-            if (id != keyword.Id)
+            if (id != _keyword.Id)
             {
                 return NotFound();
             }
@@ -99,12 +110,12 @@ namespace OFAMA.Controllers
             {
                 try
                 {
-                    _context.Update(keyword);
+                    _context.Update(_keyword);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KeywordExists(keyword.Id))
+                    if (!KeywordExists(_keyword.Id))
                     {
                         return NotFound();
                     }
@@ -115,9 +126,9 @@ namespace OFAMA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(keyword);
+            return View(_keyword);
         }
-
+        
         // GET: Keywords/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -154,6 +165,7 @@ namespace OFAMA.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool KeywordExists(int id)
         {

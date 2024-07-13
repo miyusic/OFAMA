@@ -1,4 +1,5 @@
-﻿@model OFAMA.Models.Keyword
+﻿@using OFAMA.Areas.Identity.Pages.Account;
+@model OFAMA.Areas.Identity.Pages.Account.KeywordModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,9 +15,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="keyword" class="control-label"></label>
-                <input asp-for="keyword" class="form-control" />
-                <span asp-validation-for="keyword" class="text-danger"></span>
+                <label asp-for="Keyword" class="control-label"></label>
+                <input asp-for="Keyword" class="form-control" />
+                <span asp-validation-for="Keyword" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

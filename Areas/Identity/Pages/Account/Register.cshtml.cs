@@ -11,6 +11,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using java.lang;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,8 +20,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using OFAMA.Models;
+using OFAMA.Data;
 
 namespace OFAMA.Areas.Identity.Pages.Account
 {
@@ -31,16 +34,21 @@ namespace OFAMA.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly Keyword _keyword;
+        //private readonly KeywordModel _keyword;
+        private readonly ApplicationDbContext _context;
+
         
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender
+            IEmailSender emailSender,
+            ApplicationDbContext context
+
+            //KeywordModel keyword
             //0427追加(削除済み)
-            
+
             )
         {
             _userManager = userManager;
@@ -52,6 +60,8 @@ namespace OFAMA.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             //0427(削除済み)
+            //_keyword = new KeywordModel { Id = 0, Keyword = "oto" };
+            _context = context;
             
         }
 
@@ -114,12 +124,11 @@ namespace OFAMA.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             //0427追加
-            /*
+            
             [DataType(DataType.Text)]
             [Display(Name = "事前パスワード")]
-            [Compare("asd",ErrorMessage = "WrongKeyWord")]
             public string Keyword { get; set; }
-            */
+            
 
         }
 
@@ -143,41 +152,67 @@ namespace OFAMA.Areas.Identity.Pages.Account
                     Email = Input.Email
                 };
 
+                var _keyword = _context.Keyword.Select(m => m.Keyword).FirstOrDefault();
+                if (_keyword == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Keyword is null");
+                    return Page();
+                }
+
+
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 Console.WriteLine(Input.UserName);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                
+                //作成したキーワードがtrueかどうかを判断するコード。okならif文の中へ
 
-                if (result.Succeeded)
+
+
+                //Console.WriteLine("iti"+Input.Password);
+                //Console.WriteLine("ni"+_keyword);
+                if (_keyword.Equals(Input.Keyword))
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        _logger.LogInformation("User created a new account with password.");
+
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
+
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    
+                    ModelState.AddModelError(string.Empty, "Keyword is wrong");
+                   
+
                 }
+
             }
 
             // If we got this far, something failed, redisplay form

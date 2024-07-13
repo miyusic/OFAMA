@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OFAMA.Models;
+using OFAMA.Areas.Identity.Pages.Account;
 
 namespace OFAMA.Data
 {
@@ -20,6 +20,6 @@ namespace OFAMA.Data
         public DbSet<OFAMA.Models.EditViewModel>? EditViewModel { get; set; }
         public DbSet<OFAMA.Models.RoleModel>? RoleModel { get; set; }
         public DbSet<OFAMA.Models.UserWithRoleInfo>? UserWithRoleInfo { get; set; }
-        public DbSet<OFAMA.Models.Keyword>? Keyword { get; set; }
+        public DbSet<KeywordModel>? Keyword { get; set; }
     }
 }

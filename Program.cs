@@ -13,10 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-
+//この部分に問題あり？
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 //追記
 builder.Services.Configure<SendMailParams>(builder.Configuration);
 builder.Services.AddScoped<IEmailSender, MailSender>();
