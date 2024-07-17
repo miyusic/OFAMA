@@ -13,17 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-
+//この部分に問題あり？
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 //追記
 builder.Services.Configure<SendMailParams>(builder.Configuration);
 builder.Services.AddScoped<IEmailSender, MailSender>();
 //builder.Services.AddTransient<IEmailSender, MailSender>();
 //
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    //追記2/8
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 //追記
 builder.Services.AddRazorPages();

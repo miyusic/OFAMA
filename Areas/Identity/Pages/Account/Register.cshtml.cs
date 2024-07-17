@@ -5,11 +5,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using java.lang;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,35 +20,49 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using OFAMA.Models;
+using OFAMA.Data;
 
 namespace OFAMA.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        //private readonly KeywordModel _keyword;
+        private readonly ApplicationDbContext _context;
 
+        
         public RegisterModel(
-            UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            IUserStore<IdentityUser> userStore,
+            SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context
+
+            //KeywordModel keyword
+            //0427追加(削除済み)
+
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
             //変更 11.25
-            _emailStore = (IUserEmailStore<ApplicationUser>)GetEmailStore();
+            _emailStore = (IUserEmailStore<IdentityUser>)GetEmailStore();
             //
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            //0427(削除済み)
+            //_keyword = new KeywordModel { Id = 0, Keyword = "oto" };
+            _context = context;
+            
         }
 
         /// <summary>
@@ -78,6 +95,11 @@ namespace OFAMA.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [DataType(DataType.Text)]
+            [Display(Name="UserName")]
+            public string UserName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -101,12 +123,13 @@ namespace OFAMA.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            //追加 11.25
-            [Required]
-            public string Name { get; set; }
-            public string Status { get; set; }
-            public string Authority { get; set; }
-            //
+            //0427追加
+            
+            [DataType(DataType.Text)]
+            [Display(Name = "事前パスワード")]
+            public string Keyword { get; set; }
+            
+
         }
 
 
@@ -123,59 +146,84 @@ namespace OFAMA.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = CreateUser();
-                var user = new ApplicationUser
+                var user = new IdentityUser 
                 {
-                    Email = Input.Email,
-                    Name = Input.Name,
-                    Status = Input.Status,
-                    Authority=Input.Authority
+                    UserName = Input.UserName,
+                    Email = Input.Email
                 };
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                var _keyword = _context.Keyword.Select(m => m.Keyword).FirstOrDefault();
+                if (_keyword == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Keyword is null");
+                    return Page();
+                }
+
+
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                Console.WriteLine(Input.UserName);
+                
+                //作成したキーワードがtrueかどうかを判断するコード。okならif文の中へ
 
-                if (result.Succeeded)
+
+
+                //Console.WriteLine("iti"+Input.Password);
+                //Console.WriteLine("ni"+_keyword);
+                if (_keyword.Equals(Input.Keyword))
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        _logger.LogInformation("User created a new account with password.");
+
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
+
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    
+                    ModelState.AddModelError(string.Empty, "Keyword is wrong");
+                   
+
                 }
+
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private Microsoft.AspNetCore.Identity.IdentityUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<Microsoft.AspNetCore.Identity.IdentityUser>();
             }
             catch
             {
@@ -185,13 +233,13 @@ namespace OFAMA.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<ApplicationUser> GetEmailStore()
+        private IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<ApplicationUser>)_userStore;
+            return (IUserEmailStore<IdentityUser>)_userStore;
         }
     }
 }
