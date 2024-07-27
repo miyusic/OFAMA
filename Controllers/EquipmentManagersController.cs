@@ -155,6 +155,7 @@ namespace OFAMA.Controllers
                           Problem("Entity set 'ApplicationDbContext.EquipmentManager'  is null.");
         }
 
+        /*
         // GET: EquipmentManagers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -172,6 +173,7 @@ namespace OFAMA.Controllers
 
             return View(equipmentManager);
         }
+        */
 
         // GET: EquipmentManagers/Create
         public IActionResult Create()
@@ -284,6 +286,21 @@ namespace OFAMA.Controllers
 
             var equipmentManager = await _context.EquipmentManager
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            //ユーザ名を取得
+            var username = await _userManager.Users
+                .Where(user => user.Id == equipmentManager.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            ViewBag.UserName = username;
+
+            //Item名を取得
+            var equipname = await _context.Equipment
+                .Where(user => user.Id == equipmentManager.EquipId)
+                .Select(m => m.ItemName)
+                .FirstOrDefaultAsync();
+            ViewBag.EquipName = equipname;
+
             if (equipmentManager == null)
             {
                 return NotFound();

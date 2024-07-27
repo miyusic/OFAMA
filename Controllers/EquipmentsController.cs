@@ -71,6 +71,7 @@ namespace OFAMA.Controllers
                           Problem("Entity set 'ApplicationDbContext.Equipment'  is null.");
         }
 
+        /*
         // GET: Equipments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -88,6 +89,7 @@ namespace OFAMA.Controllers
 
             return View(equipment);
         }
+        */
 
         // GET: Equipments/Create
         public IActionResult Create()
@@ -177,6 +179,7 @@ namespace OFAMA.Controllers
 
             var equipment = await _context.Equipment
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (equipment == null)
             {
                 return NotFound();
@@ -197,7 +200,22 @@ namespace OFAMA.Controllers
             var equipment = await _context.Equipment.FindAsync(id);
             if (equipment != null)
             {
-                _context.Equipment.Remove(equipment);
+                // EquipManagerにこの備品を用いている人がいないかを判定
+                // 存在しなければ nullを返す
+                var use_equipid_data = await _context.EquipmentManager
+                    .FirstOrDefaultAsync(m => m.EquipId == id);
+                if (use_equipid_data == null)
+                {
+                    //削除してOK
+                    _context.Equipment.Remove(equipment);
+                }
+                else
+                {
+                    ModelState.AddModelError("use_equipid_data", "この備品は、他のレコードで使われています");
+                    //エラーメッセージを吐く
+                    return View(equipment);
+                }
+
             }
             
             await _context.SaveChangesAsync();

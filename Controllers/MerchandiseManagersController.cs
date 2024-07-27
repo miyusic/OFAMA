@@ -130,6 +130,7 @@ namespace OFAMA.Controllers
                           Problem("Entity set 'ApplicationDbContext.MerchandiseManager'  is null.");
         }
 
+        /*
         // GET: MerchandiseManagers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -147,6 +148,7 @@ namespace OFAMA.Controllers
 
             return View(merchandiseManager);
         }
+        */
 
         // GET: MerchandiseManagers/Create
         public IActionResult Create()
@@ -263,6 +265,21 @@ namespace OFAMA.Controllers
 
             var merchandiseManager = await _context.MerchandiseManager
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            //ユーザ名を取得
+            var username = await _userManager.Users
+                .Where(user => user.Id == merchandiseManager.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            ViewBag.UserName = username;
+
+            //Item名を取得
+            var merchname = await _context.Merchandise
+                .Where(user => user.Id == merchandiseManager.MerchId)
+                .Select(m => m.ItemName)
+                .FirstOrDefaultAsync();
+            ViewBag.MerchName = merchname;
+
             if (merchandiseManager == null)
             {
                 return NotFound();

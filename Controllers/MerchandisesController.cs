@@ -65,6 +65,7 @@ namespace OFAMA.Controllers
                           Problem("Entity set 'ApplicationDbContext.Equipment'  is null.");
         }
 
+        /*
         // GET: Merchandises/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -82,6 +83,7 @@ namespace OFAMA.Controllers
 
             return View(merchandise);
         }
+        */
 
         // GET: Merchandises/Create
         public IActionResult Create()
@@ -171,6 +173,9 @@ namespace OFAMA.Controllers
 
             var merchandise = await _context.Merchandise
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            //Item名を取得
+            //ViewBag.MerchName = merchandise.ItemName;
             if (merchandise == null)
             {
                 return NotFound();
@@ -191,7 +196,21 @@ namespace OFAMA.Controllers
             var merchandise = await _context.Merchandise.FindAsync(id);
             if (merchandise != null)
             {
-                _context.Merchandise.Remove(merchandise);
+                // MerchManagerにこの商品を用いている人がいないかを判定
+                // 存在しなければ nullを返す
+                var use_merchid_data = await _context.MerchandiseManager
+                    .FirstOrDefaultAsync(m => m.MerchId == id);
+                if (use_merchid_data == null)
+                {
+                    //削除してOK
+                    _context.Merchandise.Remove(merchandise);
+                }
+                else
+                {
+                    ModelState.AddModelError("use_equipid_data", "この商品は、他のレコードで使われています");
+                    //エラーメッセージを吐く
+                    return View(merchandise);
+                }
             }
             
             await _context.SaveChangesAsync();
