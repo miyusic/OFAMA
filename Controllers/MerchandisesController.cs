@@ -207,7 +207,7 @@ namespace OFAMA.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("use_equipid_data", "この商品は、他のレコードで使われています");
+                    ModelState.AddModelError("use_merchid_data", "この商品は、他のレコードで使われています");
                     //エラーメッセージを吐く
                     return View(merchandise);
                 }
