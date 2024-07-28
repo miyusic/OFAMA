@@ -52,14 +52,14 @@ namespace OFAMA.Controllers
         // POST: Role/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-                            [Bind("Id,Name")] RoleModel model)
+        public async Task<IActionResult> Create([Bind("Id,Name")] RoleModel rolemodel)
         {
+
             if (ModelState.IsValid)
             {
                 // ユーザーが入力したロール名を model.Name から
                 // 取得し IdentityRole オブジェクトを生成
-                var role = new IdentityRole { Name = model.Name };
+                var role = new IdentityRole { Name = rolemodel.Name };
 
                 //　上の IdentityRole から新規ロールを作成・登録
                 var result = await _roleManager.CreateAsync(role);
@@ -69,19 +69,21 @@ namespace OFAMA.Controllers
                     // 登録に成功したら Role/Index にリダイレクト
                     return RedirectToAction("Index", "Role");
                 }
-
-                // result.Succeeded が false の場合 ModelSate にエ
-                // ラー情報を追加しないとエラーメッセージが出ない。
-                // Register.cshtml.cs のものをコピー
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty,
-                                             error.Description);
+                    // result.Succeeded が false の場合 ModelSate にエ
+                    // ラー情報を追加しないとエラーメッセージが出ない。
+                    // Register.cshtml.cs のものをコピー
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty,
+                                                 error.Description);
+                    }
                 }
             }
 
             // ロールの登録に失敗した場合、登録画面を再描画
-            return View(model);
+            return View(rolemodel);
         }
 
         // GET: Role/Edit/5
