@@ -1,0 +1,71 @@
+﻿@model IEnumerable<OFAMA.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div style="text-align:center">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </th>
+                
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles)
+            </th>
+                <th></th>
+            <th></th>
+                
+                <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
+            
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                
+                @for (int i = 0; i < item.UserRoles.Count; i++)
+                {
+                    <td>
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
+
+                    </td>
+                }
+                
+                
+  
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">ChangePassword</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-controller="Role" asp-action="EditRoleAssignment" asp-route-id="@item.Id">AddStatus</a>
+                </td>
+            </tr>
+            
+        }
+    </tbody>
+    
+</table>
+</div>

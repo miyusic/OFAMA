@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OFAMA.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OFAMA.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,7 +19,6 @@ namespace OFAMA.Controllers
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
