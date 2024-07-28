@@ -100,12 +100,25 @@ namespace OFAMA.Controllers
         {
             if (ModelState.IsValid)
             {
-                var now_date = DateTime.Now;
-                merchandise.Updated_at = now_date;
-                merchandise.Created_at = now_date;
-                _context.Add(merchandise);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //名前が一致するItemのレコードを取得
+                var merchname = await _context.Merchandise
+                    .FirstOrDefaultAsync(m => m.ItemName == merchandise.ItemName);
+
+                if (merchname == null)
+                {
+                    var now_date = DateTime.Now;
+                    merchandise.Updated_at = now_date;
+                    merchandise.Created_at = now_date;
+                    _context.Add(merchandise);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else//同じ名前のデータは登録できない
+                {
+                    ModelState.AddModelError("ItemName", "この商品は既に存在しています");
+                    return View(merchandise);
+                }
             }
             return View(merchandise);
         }
@@ -142,10 +155,22 @@ namespace OFAMA.Controllers
             {
                 try
                 {
-                    var update_date = DateTime.Now;
-                    merchandise.Updated_at = update_date;
-                    _context.Update(merchandise);
-                    await _context.SaveChangesAsync();
+                    //名前が一致するItemのレコードを取得
+                    var merchname = await _context.Merchandise
+                        .FirstOrDefaultAsync(m => m.ItemName == merchandise.ItemName);
+
+                    if (merchname == null)
+                    {
+                        var update_date = DateTime.Now;
+                        merchandise.Updated_at = update_date;
+                        _context.Update(merchandise);
+                        await _context.SaveChangesAsync();
+                    }
+                    else//同じ名前のデータは登録できない
+                    {
+                        ModelState.AddModelError("ItemName", "この商品は既に存在しています");
+                        return View(merchandise);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
