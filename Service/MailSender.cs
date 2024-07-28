@@ -3,15 +3,14 @@ using MailKit.Security;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System.Threading.Tasks;
-using OFAMA.Models;
+
 
 namespace OFAMA.Service
 {
 
     public class MailSender : IEmailSender
     {
-        SendMailParams _sendMailParams;
+        private readonly SendMailParams _sendMailParams;
         private readonly ILogger _logger;
 
 
@@ -20,6 +19,9 @@ namespace OFAMA.Service
         {
             _sendMailParams = optionAccessor.Value;
             _logger = logger;
+
+            _logger.LogInformation("SendAddress: {SendAddress}", _sendMailParams.SendAddress);
+            _logger.LogInformation("User: {User}", _sendMailParams.User);
         }
 
         /*public SendMailParams options { get; }*/
@@ -27,6 +29,7 @@ namespace OFAMA.Service
         public Task SendEmailAsync(string email, string subject, string message)
         {
             return Execute(subject, message, email);
+
         }
 
        

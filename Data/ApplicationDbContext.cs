@@ -13,13 +13,13 @@ namespace OFAMA.Data
             : base(options)
         {
         }
+        // 備品管理と商品管理
         public DbSet<OFAMA.Models.Equipment>? Equipment { get; set; }
         public DbSet<OFAMA.Models.Merchandise>? Merchandise { get; set; }
         public DbSet<OFAMA.Models.EquipmentManager>? EquipmentManager { get; set; }
         public DbSet<OFAMA.Models.MerchandiseManager>? MerchandiseManager { get; set; }
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
+
+        // ユーザ登録用のモデル
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

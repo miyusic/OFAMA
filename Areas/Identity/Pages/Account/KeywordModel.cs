@@ -1,8 +1,13 @@
-﻿namespace OFAMA.Areas.Identity.Pages.Account
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OFAMA.Areas.Identity.Pages.Account
 {
     public class KeywordModel
     {
         public int Id { get; set; }
         public string? Keyword { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime Created_at { get; set; }
     }
 }
