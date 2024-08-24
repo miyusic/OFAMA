@@ -23,4 +23,5 @@ namespace OFAMA.Models
         //作成日検索で使う終了日時を格納
         public DateTime? EndDate { get; set; }
     }
+
 }

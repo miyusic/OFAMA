@@ -1,0 +1,102 @@
+﻿@model OFAMA.Models.ItemManagerMove
+
+@{
+    ViewData["Title"] = "Move";
+}
+
+<h1>Move</h1>
+
+<h4>EquipmentManager</h4>
+<hr />
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            商品名
+        </dt>
+        <dd class = "col-sm-10">
+            @(ViewBag.MerchName)
+        </dd>
+        <dt class = "col-sm-2">
+            ユーザ名
+        </dt>
+        <dd class = "col-sm-10">
+            @(ViewBag.UserName)
+        </dd>
+        <dt class = "col-sm-2">
+            数量
+        </dt>
+        <dd class = "col-sm-10">
+            @(ViewBag.Amount)
+        </dd>
+        <dt class = "col-sm-2">
+            作成日
+        </dt>
+        <dd class = "col-sm-10">
+            @(ViewBag.Created_at)
+        </dd>
+        <dt class = "col-sm-2">
+            更新日
+        </dt>
+        <dd class = "col-sm-10">
+            @(ViewBag.Updated_at)
+        </dd>
+    </dl>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Move">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                移動先ユーザ名1
+                <select asp-for="UserId1" asp-items="@(ViewBag.Users)" class="form-control">
+                    <option value="">選択してください</option>
+                </select>
+                <span asp-validation-for="UserId1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount1" class="control-label"></label>
+                <input asp-for="Amount1" class="form-control" />
+                <span asp-validation-for="Amount1" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                移動先ユーザ名2
+                <select asp-for="UserId2" asp-items="@(ViewBag.Users)" class="form-control">
+                    <option value="">選択してください</option>
+                </select>
+                <span asp-validation-for="UserId2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount2" class="control-label"></label>
+                <input asp-for="Amount2" class="form-control" />
+                <span asp-validation-for="Amount2" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                移動先ユーザ名3
+                <select asp-for="UserId3" asp-items="@(ViewBag.Users)" class="form-control">
+                    <option value="">選択してください</option>
+                </select>
+                <span asp-validation-for="UserId3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount3" class="control-label"></label>
+                <input asp-for="Amount3" class="form-control" />
+                <span asp-validation-for="Amount3" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Move" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

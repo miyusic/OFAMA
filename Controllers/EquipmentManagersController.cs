@@ -150,9 +150,9 @@ namespace OFAMA.Controllers
                 EquipmentManagers = await equipMngs.ToListAsync()
             };
 
-            return _context.EquipmentManager != null ? 
+            return equipMngVM != null ? 
                           View(equipMngVM) :
-                          Problem("Entity set 'ApplicationDbContext.EquipmentManager'  is null.");
+                          Problem("Entity set 'ApplicationDbContext.EquipmentManagerViewModel'  is null.");
         }
 
         /*
@@ -327,6 +327,230 @@ namespace OFAMA.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: EquipmentManagers/Move/5
+        public async Task<IActionResult> Move(int? id)
+        {
+            if (id == null || _context.EquipmentManager == null)
+            {
+                return NotFound();
+            }
+
+            var equipmentManager = await _context.EquipmentManager
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (equipmentManager == null)
+            {
+                return NotFound();
+            }
+
+            /* 表示データ */
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
+            //テーブルから全てのデータを取得するLINQクエリ
+            var equips = _context.Equipment
+                .Select(m => new { m.Id, m.ItemName })
+                .OrderBy(user => user.ItemName);
+            ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
+
+            //ユーザ名を取得
+            var username = await _userManager.Users
+                .Where(user => user.Id == equipmentManager.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            ViewBag.UserName = username;
+
+            //Item名を取得
+            var equipname = await _context.Equipment
+                .Where(user => user.Id == equipmentManager.EquipId)
+                .Select(m => m.ItemName)
+                .FirstOrDefaultAsync();
+            ViewBag.EquipName = equipname;
+
+            //その他情報をviewBagに格納
+            ViewBag.Amount = equipmentManager.Amount;
+            ViewBag.Created_at = equipmentManager.Created_at;
+            ViewBag.Updated_at = equipmentManager.Updated_at;
+            /* ここまで */
+
+            return View();
+        }
+
+        // POST: EquipmentManagers/Move/5
+        [HttpPost, ActionName("Move")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MoveData(int id, [Bind("UserId1,Amount1,UserId2,Amount2,UserId3,Amount3")] ItemManagerMove equipmernagemove)
+        {
+
+            var equipmentManager = await _context.EquipmentManager.FirstOrDefaultAsync(m => m.Id == id);
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
+            //テーブルから全てのデータを取得するLINQクエリ
+            var equips = _context.Equipment
+                .Select(m => new { m.Id, m.ItemName })
+                .OrderBy(user => user.ItemName);
+            ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
+
+            if (equipmentManager != null)
+            {
+                /* 表示データ */
+                //ユーザ名を取得
+                var username = await _userManager.Users
+                    .Where(user => user.Id == equipmentManager.UserId)
+                    .Select(user => user.UserName)
+                    .FirstOrDefaultAsync();
+                ViewBag.UserName = username;
+
+                //Item名を取得
+                var equipname = await _context.Equipment
+                    .Where(user => user.Id == equipmentManager.EquipId)
+                    .Select(m => m.ItemName)
+                    .FirstOrDefaultAsync();
+                ViewBag.EquipName = equipname;
+
+                //その他情報をviewBagに格納
+                ViewBag.Amount = equipmentManager.Amount;
+                ViewBag.Created_at = equipmentManager.Created_at;
+                ViewBag.Updated_at = equipmentManager.Updated_at;
+                /* ここまで */
+            }
+
+                if (ModelState.IsValid)
+            {
+                if (equipmentManager != null)
+                {
+                    if (equipmentManager.UserId == equipmernagemove.UserId1)
+                    {
+                        ModelState.AddModelError("UserId1", "元データと同じユーザ名が指定されています");
+                        return View(equipmernagemove);
+                    }
+
+                    // 数量を保存
+                    var amount_before = equipmentManager.Amount;
+                    List<int> amount_list = new List<int> { equipmernagemove.Amount1};
+                    List<string> userid_list = new List<string> { equipmernagemove.UserId1 };
+
+                    // 2つ目のデータがあれば追加
+                    if (!string.IsNullOrEmpty(equipmernagemove.UserId2) && equipmernagemove.Amount2 > 0)
+                    {
+                        if (equipmentManager.UserId == equipmernagemove.UserId2)
+                        {
+                            ModelState.AddModelError("UserId2", "元データと同じユーザ名が指定されています");
+                            return View(equipmernagemove);
+                        }
+                            if (equipmernagemove.UserId1== equipmernagemove.UserId2)
+                        {
+                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+
+                            // 3つ目のデータも被りがあれば、エラーメッセージを出す
+                            if (!string.IsNullOrEmpty(equipmernagemove.UserId3) && equipmernagemove.Amount3 > 0)
+                            {
+                                if ((equipmernagemove.UserId1 == equipmernagemove.UserId3)
+                                    && (equipmernagemove.UserId2 == equipmernagemove.UserId3))
+                                {
+                                    ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                }
+                            }
+                            return View(equipmernagemove);
+                        }
+                        userid_list.Add(equipmernagemove.UserId2);
+                        amount_list.Add((int)equipmernagemove.Amount2);
+                    }
+                    // 3つ目のデータがあれば追加
+                    if (!string.IsNullOrEmpty(equipmernagemove.UserId3) && equipmernagemove.Amount3 > 0)
+                    {
+                        if (equipmentManager.UserId == equipmernagemove.UserId3)
+                        {
+                            ModelState.AddModelError("UserId3", "元データと同じユーザ名が指定されています");
+                            return View(equipmernagemove);
+                        }
+
+                        if (equipmernagemove.UserId1 == equipmernagemove.UserId3)
+                        {
+                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                            if (equipmernagemove.UserId2 == equipmernagemove.UserId3)
+                            {
+                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                            }
+                            return View(equipmernagemove);
+                        }
+                        else
+                        {
+                            if (equipmernagemove.UserId2 == equipmernagemove.UserId3)
+                            {
+                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                                ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                return View(equipmernagemove);
+                            }
+                        }
+                        userid_list.Add(equipmernagemove.UserId3);
+                        amount_list.Add((int)equipmernagemove.Amount3);
+                    }
+
+                    // もし、数量がマイナスになるならエラーメッセージを出す
+                    if (amount_before - amount_list.Sum() < 0)
+                    {
+                        ModelState.AddModelError("Amount1", "合計値が元の数量を超えます");
+                        ModelState.AddModelError("Amount2", "合計値が元の数量を超えます");
+                        ModelState.AddModelError("Amount3", "合計値が元の数量を超えます");
+                        return View(equipmernagemove);
+                    }
+                    else
+                    {
+                        // 登録データの作成
+                        var now_date = DateTime.Now;
+
+                        // データのコピー + 登録
+                        for (int i = 0; i < amount_list.Count; i++)
+                        {
+                            // データをコピーして新しいインスタンスを作成
+                            var newEquipmentManager = new EquipmentManager
+                            {
+                                // Idを除いた全てのプロパティをコピーする
+                                // 元のデータとは違うデータはここで定義しない
+                                EquipId = equipmentManager.EquipId,
+                                UserId = userid_list[i],
+                                Amount = amount_list[i],
+                                Created_at = now_date,
+                                Updated_at = now_date
+                            };
+                            // データの追加
+                            _context.Add(newEquipmentManager);
+                            
+                        }
+
+                        //前のデータをいじる
+                        //もし、移動の結果、数量が0になるなら削除
+                        if (amount_before - amount_list.Sum() == 0)
+                        {
+                            if (equipmentManager != null)
+                            {
+                                _context.EquipmentManager.Remove(equipmentManager);
+                            }
+                        }
+                        else//更新日時と、数量を変更する
+                        {
+                            equipmentManager.Amount = amount_before - amount_list.Sum();
+                            equipmentManager.Updated_at = now_date;
+                            _context.Update(equipmentManager);
+                        }
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+            }
+            return View(equipmernagemove);
+        }
+
 
         private bool EquipmentManagerExists(int id)
         {

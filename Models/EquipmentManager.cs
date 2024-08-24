@@ -31,4 +31,6 @@ namespace OFAMA.Models
         [DisplayName("最終更新日時")]
         public DateTime Updated_at { get; set; }
     }
+
+    
 }

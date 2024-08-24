@@ -307,6 +307,229 @@ namespace OFAMA.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: MerchandiseManagers/Move/5
+        public async Task<IActionResult> Move(int? id)
+        {
+            if (id == null || _context.MerchandiseManager == null)
+            {
+                return NotFound();
+            }
+
+            var merchManager = await _context.MerchandiseManager
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (merchManager == null)
+            {
+                return NotFound();
+            }
+
+            /* 表示データ */
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
+            //テーブルから全てのデータを取得するLINQクエリ
+            var equips = _context.Merchandise
+                .Select(m => new { m.Id, m.ItemName })
+                .OrderBy(user => user.ItemName);
+            ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
+
+            //ユーザ名を取得
+            var username = await _userManager.Users
+                .Where(user => user.Id == merchManager.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            ViewBag.UserName = username;
+
+            //Item名を取得
+            var merchname = await _context.Merchandise
+                .Where(user => user.Id == merchManager.MerchId)
+                .Select(m => m.ItemName)
+                .FirstOrDefaultAsync();
+            ViewBag.MerchName = merchname;
+
+            //その他情報をviewBagに格納
+            ViewBag.Amount = merchManager.Amount;
+            ViewBag.Created_at = merchManager.Created_at;
+            ViewBag.Updated_at = merchManager.Updated_at;
+            /* ここまで */
+
+            return View();
+        }
+
+        // POST: MerchandiseManagers/Move/5
+        [HttpPost, ActionName("Move")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MoveData(int id, [Bind("UserId1,Amount1,UserId2,Amount2,UserId3,Amount3")] ItemManagerMove itemmernagemove)
+        {
+
+            var merchManager = await _context.MerchandiseManager.FirstOrDefaultAsync(m => m.Id == id);
+            //ユーザリスト
+            var users = _userManager.Users
+                .Select(user => new { user.Id, user.UserName })
+                .OrderBy(user => user.UserName);
+            ViewBag.Users = new SelectList(users, "Id", "UserName");
+
+            //テーブルから全てのデータを取得するLINQクエリ
+            var equips = _context.Merchandise
+                .Select(m => new { m.Id, m.ItemName })
+                .OrderBy(user => user.ItemName);
+            ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
+
+            if (merchManager != null)
+            {
+                /* 表示データ */
+                //ユーザ名を取得
+                var username = await _userManager.Users
+                    .Where(user => user.Id == merchManager.UserId)
+                    .Select(user => user.UserName)
+                    .FirstOrDefaultAsync();
+                ViewBag.UserName = username;
+
+                //Item名を取得
+                var merchname = await _context.Merchandise
+                    .Where(user => user.Id == merchManager.MerchId)
+                    .Select(m => m.ItemName)
+                    .FirstOrDefaultAsync();
+                ViewBag.MerchName = merchname;
+
+                //その他情報をviewBagに格納
+                ViewBag.Amount = merchManager.Amount;
+                ViewBag.Created_at = merchManager.Created_at;
+                ViewBag.Updated_at = merchManager.Updated_at;
+                /* ここまで */
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (merchManager != null)
+                {
+                    if (merchManager.UserId == itemmernagemove.UserId1)
+                    {
+                        ModelState.AddModelError("UserId1", "元データと同じユーザ名が指定されています");
+                        return View(itemmernagemove);
+                    }
+
+                    // 数量を保存
+                    var amount_before = merchManager.Amount;
+                    List<int> amount_list = new List<int> { itemmernagemove.Amount1 };
+                    List<string> userid_list = new List<string> { itemmernagemove.UserId1 };
+
+                    // 2つ目のデータがあれば追加
+                    if (!string.IsNullOrEmpty(itemmernagemove.UserId2) && itemmernagemove.Amount2 > 0)
+                    {
+                        if (merchManager.UserId == itemmernagemove.UserId2)
+                        {
+                            ModelState.AddModelError("UserId2", "元データと同じユーザ名が指定されています");
+                            return View(itemmernagemove);
+                        }
+                        if (itemmernagemove.UserId1 == itemmernagemove.UserId2)
+                        {
+                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+
+                            // 3つ目のデータも被りがあれば、エラーメッセージを出す
+                            if (!string.IsNullOrEmpty(itemmernagemove.UserId3) && itemmernagemove.Amount3 > 0)
+                            {
+                                if ((itemmernagemove.UserId1 == itemmernagemove.UserId3)
+                                    && (itemmernagemove.UserId2 == itemmernagemove.UserId3))
+                                {
+                                    ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                }
+                            }
+                            return View(itemmernagemove);
+                        }
+                        userid_list.Add(itemmernagemove.UserId2);
+                        amount_list.Add((int)itemmernagemove.Amount2);
+                    }
+                    // 3つ目のデータがあれば追加
+                    if (!string.IsNullOrEmpty(itemmernagemove.UserId3) && itemmernagemove.Amount3 > 0)
+                    {
+                        if (merchManager.UserId == itemmernagemove.UserId3)
+                        {
+                            ModelState.AddModelError("UserId3", "元データと同じユーザ名が指定されています");
+                            return View(itemmernagemove);
+                        }
+
+                        if (itemmernagemove.UserId1 == itemmernagemove.UserId3)
+                        {
+                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                            if (itemmernagemove.UserId2 == itemmernagemove.UserId3)
+                            {
+                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                            }
+                            return View(itemmernagemove);
+                        }
+                        else
+                        {
+                            if (itemmernagemove.UserId2 == itemmernagemove.UserId3)
+                            {
+                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                                ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                return View(itemmernagemove);
+                            }
+                        }
+                        userid_list.Add(itemmernagemove.UserId3);
+                        amount_list.Add((int)itemmernagemove.Amount3);
+                    }
+
+                    // もし、数量がマイナスになるならエラーメッセージを出す
+                    if (amount_before - amount_list.Sum() < 0)
+                    {
+                        ModelState.AddModelError("Amount1", "合計値が元の数量を超えます");
+                        ModelState.AddModelError("Amount2", "合計値が元の数量を超えます");
+                        ModelState.AddModelError("Amount3", "合計値が元の数量を超えます");
+                        return View(itemmernagemove);
+                    }
+                    else
+                    {
+                        // 登録データの作成
+                        var now_date = DateTime.Now;
+
+                        // データのコピー + 登録
+                        for (int i = 0; i < amount_list.Count; i++)
+                        {
+                            // データをコピーして新しいインスタンスを作成
+                            var newMerchdiseManager = new MerchandiseManager
+                            {
+                                // Idを除いた全てのプロパティをコピーする
+                                // 元のデータとは違うデータはここで定義しない
+                                MerchId = merchManager.MerchId,
+                                UserId = userid_list[i],
+                                Amount = amount_list[i],
+                                Created_at = now_date,
+                                Updated_at = now_date
+                            };
+                            // データの追加
+                            _context.Add(newMerchdiseManager);
+
+                        }
+
+                        //前のデータをいじる
+                        //もし、移動の結果、数量が0になるなら削除
+                        if (amount_before - amount_list.Sum() == 0)
+                        {
+                            if (merchManager != null)
+                            {
+                                _context.MerchandiseManager.Remove(merchManager);
+                            }
+                        }
+                        else//更新日時と、数量を変更する
+                        {
+                            merchManager.Amount = amount_before - amount_list.Sum();
+                            merchManager.Updated_at = now_date;
+                            _context.Update(merchManager);
+                        }
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+            }
+            return View(itemmernagemove);
+        }
+
         private bool MerchandiseManagerExists(int id)
         {
           return (_context.MerchandiseManager?.Any(e => e.Id == id)).GetValueOrDefault();
