@@ -65,6 +65,8 @@ namespace OFAMA.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    DateTime now_date = DateTime.Now;
+                    _keyword.Updated_at = now_date;
                     _context.Add(_keyword);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -110,6 +112,8 @@ namespace OFAMA.Controllers
             {
                 try
                 {
+                    var now_date = DateTime.Now;
+                    _keyword.Updated_at = now_date;
                     _context.Update(_keyword);
                     await _context.SaveChangesAsync();
                 }

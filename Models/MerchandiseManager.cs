@@ -29,6 +29,7 @@ namespace OFAMA.Models
 
         [Required(ErrorMessage = "最終更新日時は必須項目です")]
         [DisplayName("最終更新日時")]
+        [DataType(DataType.DateTime)]
         public DateTime Updated_at { get; set; }
     }
 }
