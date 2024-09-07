@@ -16,3 +16,39 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*ここから追加*/
+.heading {
+    margin-top: 30px; /* 上部の空白の大きさ */
+}
+
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between; /* 左右の要素の間にスペースを最大化 */
+}
+
+
+.btn-primary:hover {
+    background-color: #007bff;
+}
+
+
+.btn-outline-primary {
+    background-color: #F0FFFF; /* 背景色を白に変更 */
+    color: #007bff; /* テキスト色をBootstrapのプライマリーカラーに設定 */
+    border-color: #007bff; /* ボーダー色もプライマリーカラーに合わせる */
+}
+
+.form-floating {
+    width: 100%;
+}
+
+.form-control {
+    width: 100%;
+}
+
+
+.form-group {
+    margin-bottom: 1rem; /* 必要に応じて調整 */
+}

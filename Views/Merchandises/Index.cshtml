@@ -4,86 +4,120 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+
+
+</head>
+<h3 class="heading">商品名登録</h3>
 
 <p>
-    <a asp-action="Create">新規作成</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    <form asp-controller="Merchandises" asp-action="Index" method="get">
+        <p>
+            <input type="submit" value="全データ表示" class="btn btn-outline-primary btn-lg" />
+        </p>
+    </form>
 </p>
 
 <form asp-controller="Merchandises" asp-action="Index" method="get">
-    <p>
-        制作年度検索:
-        <select asp-for="MerchYear" asp-items="Model.Years">
-            <option value="">全て</option>
-        </select>
 
-        種別検索:
-        <select asp-for="MerchKind" asp-items="Model.Kinds">
-            <option value="">全て</option>
-        </select>
 
-        商品名検索: <input type="text" asp-for="SearchString" />
-        <input type="submit" value="検索" />
-    </p>
+    <ul class="accordion-area">
+        <li>
+            <section>
+                <h3 class="accordiontitle">絞り込み検索</h3>
+                <div class="accordionbox">
+                    <div>制作年度検索</div>
+                    <div>
+                        <select asp-for="MerchYear" asp-items="Model.Years">
+                            <option value="">全て</option>
+                        </select>
+                    </div>
+
+                    <div>種別検索</div>
+                    <div>
+                        <select asp-for="MerchKind" asp-items="Model.Kinds">
+                            <option value="">全て</option>
+                        </select>
+                    </div>
+                    <div>
+                        商品名検索
+                    </div>
+                    <div>
+                        <input type="text" asp-for="SearchString" />
+                    </div>
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+
+                </div>
+
+            </section>
+        </li>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                crossorigin="anonymous"></script>
+
+
+        <script src="~/js/accordionpanel.js"></script>
 </form>
 
-<form asp-controller="Merchandises" asp-action="Index" method="get">
-    <p>
-        <input type="submit" value="全データ表示" />
-    </p>
-</form>
-
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].ItemName)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Price)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Kind)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Created_yaer)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Created_at)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Updated_at)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Merchandises) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kind)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created_yaer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created_at)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated_at)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <!--<a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Merchandises)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kind)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_yaer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_at)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated_at)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                    <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

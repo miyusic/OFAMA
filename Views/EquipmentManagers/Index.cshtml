@@ -4,30 +4,61 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-<h2><a asp-area="" asp-controller="Equipments" asp-action="Index">備品メニュー</a></h2>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
+<h3 class="heading">備品管理</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="buttons-container">
+    <div>
+        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+        <div class="mb-3"></div>
+        <form asp-controller="EquipmentManagers" asp-action="Index" method="get">
+
+            <input type="submit" value="全データ表示" class="btn btn-outline-primary btn-lg" />
+
+        </form>
+    </div>
+    <div>
+        <a asp-area="" asp-controller="Equipments" asp-action="Index" class="btn btn-primary btn-lg">備品名登録</a>
+    </div>
+</div>
 
 <form asp-controller="EquipmentManagers" asp-action="Index" method="get">
-    <p>
-        作成日検索: <input　type="date" asp-for="StartDate" class="form-control"  />
-        <input　type="date" asp-for="EndDate" class="form-control"  />
-        ユーザ検索:<input type="text" asp-for="SearchNameString" />
-        商品名検索:<input type="text" asp-for="SearchEquipString" />
-        <input type="submit" value="検索" />
-    </p>
+    <ul class="accordion-area">
+        <li>
+            <section>
+                <h3 class="accordiontitle">絞り込み検索</h3>
+                <div class="accordionbox">
+                    <div>ユーザ名</div>
+                    <div><input type="text" asp-for="SearchNameString" /></div>
+
+                    <div>備品名</div>
+                    <div><input type="text" asp-for="SearchEquipString" /></div>
+
+                    <div>期間を指定</div>
+                    <div> </div>
+                    <div><開始日></div>
+                   
+                    <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
+                    <div><終了日></div>
+                    <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+
+                </div>
+            </section>
+        </li>
+    </ul>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="~/js/accordionpanel.js"></script>
 </form>
 
-<form asp-controller="EquipmentManagers" asp-action="Index" method="get">
-    <p>
-        <input type="submit" value="全データ表示" />
-    </p>
- </form>
-
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -76,10 +107,9 @@
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Move" asp-route-id="@item.Id">Move</a> |
-                <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                <a asp-action="Move" asp-route-id="@item.Id" class="btn btn-success btn-sm">Move</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
 }

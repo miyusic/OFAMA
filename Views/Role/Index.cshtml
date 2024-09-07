@@ -4,15 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<p>
-    <a asp-action="UserWithRoles">ロール付与</a>
-</p>
-<table class="table">
+<h3 class="heading">ロール管理</h3>
+
+<div class="buttons-container">
+    <div>
+        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    </div>
+    <div>
+        <a asp-action="UserWithRoles" class="btn btn-primary btn-lg">ロール付与</a>
+    </div>
+</div>
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -27,9 +38,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
 }

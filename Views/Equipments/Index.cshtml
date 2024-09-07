@@ -4,29 +4,56 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
+<h3 class="heading">備品名登録</h3>
 
 <p>
-    <a asp-action="Create">Create New</a>
+   
+
+        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+       
+        <form asp-controller="Equipments" asp-action="Index" method="get">
+          
+            <input type="submit" value="全データ表示" class="btn btn-outline-primary btn-lg" />
+        </form>
+
+   
 </p>
 
 <form asp-controller="Equipments" asp-action="Index" method="get">
-    <p>
-        <select asp-for="SearchExpandableString" asp-items="Model.Expandables">
-            <option value="">全て</option>
-        </select>
-        備品名検索: <input type="text" name="SearchString" />
-        <input type="submit" value="検索" />
-    </p>
+    <ul class="accordion-area">
+        <li>
+            <section>
+                <h3 class="accordiontitle">絞り込み検索</h3>
+                <div class="accordionbox">
+                    <div>備品名検索</div>
+
+                    <div><input type="text" asp-for="SearchString" /></div>
+                    <div>消耗品/非消耗品</div>
+                    <div><select asp-for="SearchExpandableString" asp-items="Model.Expandables"> <option value="">全て</option> </select></div>
+
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+
+                </div>
+
+            </section>
+        </li>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                crossorigin="anonymous"></script>
+
+
+        <script src="~/js/accordionpanel.js"></script>
 </form>
 
-<form asp-controller="Equipments" asp-action="Index" method="get">
-    <p>
-        <input type="submit" value="全データ表示" />
-    </p>
- </form>
-
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -60,9 +87,8 @@
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
 }

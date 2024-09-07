@@ -10,38 +10,56 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3" >
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OFAMA</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarColor02">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                             <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index" data-target="Home"> Home
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="EquipmentManagers" asp-action="Index" data-target="EquipmentManagers">備品管理</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="EquipmentManagers" asp-action="Index" data-target="EquipmentManagers">備品管理</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Equipments" asp-action="Index" data-target="Equipments">備品名登録</a>
+
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="MerchandiseManagers" asp-action="Index" data-target="MerchandiseManagers">商品管理</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="MerchandiseManagers" asp-action="Index" data-target="MerchandiseManagers">商品管理</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Merchandises" asp-action="Index" data-target="Merchandises">商品名登録</a>
+                            </div>
+
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">会計管理</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">会計管理</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">支払機関登録</a>
+                            </div>
+                        </li>
+                     
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index" data-target="Users">ユーザー管理</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="Role" asp-action="Index" data-target="Rple">ロール管理</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index" data-target="Role">ロール管理</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="UserWithRoles" data-target="UserWithRoles">ロール付与</a>
+                            </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EquipmentManagers" asp-action="Index">備品管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MerchandiseManagers" asp-action="Index">商品管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">会計管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index" >ユーザー管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">ロール管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="KeyWords" asp-action="Index">キーワード</a>
+                            <a class="nav-link" asp-area="" asp-controller="KeyWords" asp-action="Index" data-target="Keywords">キーワード</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -55,13 +73,14 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer bg-dark text-light">
         <div class="container">
             &copy; 2023 - OFAMA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

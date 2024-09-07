@@ -4,9 +4,14 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<h1 class="heading">Edit</h1>
 
-<h4>Equipment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,14 +30,11 @@
             </div>
             <input type="hidden" asp-for="Created_at" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary me-3" />
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
