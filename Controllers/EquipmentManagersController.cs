@@ -48,10 +48,12 @@ namespace OFAMA.Controllers
                 }).Select(x => new {x.EquipId, x.ItemName}).OrderBy(x => x.ItemName);
 
             //ユーザリスト
+            /*
             var users = _userManager.Users
                 .Select(user => new { user.Id, user.UserName })
                 .OrderBy(user => user.UserName);
             ViewBag.Users = new SelectList(users, "Id", "UserName");
+            */
             
 
             var userDictionary = _userManager.Users.ToDictionary(e => e.Id);
@@ -78,17 +80,6 @@ namespace OFAMA.Controllers
             // ユーザ名検索処理
             if (!string.IsNullOrEmpty(searchNameString))
             {
-                /*
-                foreach (KeyValuePair<int, string> kvp in equipDictionary)
-                {
-                    if (searchString == equipDictionary[kvp.Key])
-                    {
-                        // タイトルに検索文字列が含まれるデータを抽出する
-                        equipMngs = equipMngs.Where(s => s.EquipId == kvp.Key);
-                        break;
-                    }
-                }
-                */
                 // 名前に検索文字列が含まれるデータを抽出する
                 
                 equipMngs = equipMngs
@@ -105,8 +96,6 @@ namespace OFAMA.Controllers
                     )
                     .Where(joinResult => joinResult.UserName.Contains(searchNameString))
                     .Select(joinResult => joinResult.EquipmentManager);
-
-                //equipMngs = equipMngs;
             }
 
             //日付での絞り込み

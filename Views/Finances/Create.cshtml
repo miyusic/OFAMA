@@ -1,0 +1,68 @@
+﻿@model OFAMA.Models.Finance
+
+@{
+    ViewData["Title"] = "Create";
+}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<h1>Create</h1>
+
+<h4>Finance</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" asp-items="@(ViewBag.Users)" class="form-control">
+                    <option value="">選択してください</option>
+                </select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Money" class="control-label"></label>
+                <input asp-for="Money" class="form-control" />
+                <span asp-validation-for="Money" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Received" class="control-label"></label>
+                <select asp-for="Received" class="form-control">
+                    <option value="">選択してください</option>
+                    <option value="入金">入金</option>
+                    <option value="出金">出金</option>
+                </select>
+                <span asp-validation-for="Received" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstiId" class="control-label"></label>
+                <select asp-for="InstiId" asp-items="@(ViewBag.Institutions)" class="form-control">
+                    <option value="">選択してください</option>
+                </select>
+                <span asp-validation-for="InstiId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Way" class="control-label"></label>
+                <input asp-for="Way" class="form-control" />
+                <span asp-validation-for="Way" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created_at" class="control-label"></label>
+                <input asp-for="Created_at" class="form-control" />
+                <span asp-validation-for="Created_at" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

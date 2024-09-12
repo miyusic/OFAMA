@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KeywordModel>
+﻿@model IEnumerable<OFAMA.Models.Institution>
 
 @{
     ViewData["Title"] = "Index";
@@ -11,16 +11,16 @@
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
 
-<h3 class="heading">キーワード管理</h3>
+<h1>機関管理画面</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
 </p>
-<table class="table table-hover">
+<table class="table  table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Keyword)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Updated_at)
@@ -32,7 +32,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Keyword)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Updated_at)

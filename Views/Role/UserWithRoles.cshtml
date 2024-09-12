@@ -23,9 +23,6 @@
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserEmail)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.UserRoles)
             </th>
             
@@ -38,9 +35,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserEmail)
             </td>
                 
                     @for (int i = 0; i < item.UserRoles.Count; i++)

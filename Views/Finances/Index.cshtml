@@ -1,0 +1,151 @@
+﻿@model OFAMA.Models.FinanceViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
+
+<h1>会計管理</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
+</p>
+
+<!--
+<form asp-controller="Finances" asp-action="Index" method="get">
+    <p>
+        入出金検索:
+        <select asp-for="FinanceReceived" asp-items="Model.Receiveds">
+            <option value="">全て</option>
+        </select>
+        機関検索:
+        <select asp-for="FinanceInstitution" asp-items="Model.Institutions">
+            <option value="">全て</option>
+        </select>
+        
+        用途検索: <input type="text" asp-for="SearchString" />
+        名前検索: <input type="text" asp-for="SearchNameString" />
+        <input type="submit" value="検索" />
+    </p>
+
+</form>
+-->
+<form asp-controller="Finances" asp-action="Index" method="get">
+    <ul class="accordion-area">
+        <li>
+            <section>
+                <h3 class="accordiontitle">絞り込み検索</h3>
+                <div class="accordionbox">
+                    <div>入出金検索</div>
+                    <div>
+                        <select asp-for="FinanceReceived" asp-items="Model.Receiveds">
+                            <option value="">全て</option>
+                        </select>
+                    </div>
+
+                    <div>機関名</div>
+                    <div>
+                        <select asp-for="FinanceInstitution" asp-items="Model.Institutions">
+                            <option value="">全て</option>
+                        </select>
+                    </div>
+
+                    <div>ユーザ名</div>
+                    <div><input type="text" asp-for="SearchNameString" /></div>
+
+                    <div>用途</div>
+                    <div><input type="text" asp-for="SearchString" /></div>
+
+                    <!--
+                    <div>期間を指定</div>
+                    <div> </div>
+                    <div><開始日></div>
+                   
+                    <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
+                    <div><終了日></div>
+                    <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+                    -->
+                </div>
+            </section>
+        </li>
+    </ul>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="~/js/accordionpanel.js"></script>
+</form>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].Money)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].Received)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].InstiId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].Way)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].Created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Finances[0].Updated_at)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Finances) {
+        <tr>
+            <td>
+                @{
+                // 対応するItemNameを取得する
+                //var userName = item.UserId;
+                var userName = ViewBag.UserDictionary[(item.UserId)];
+                }
+                @userName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Received)
+            </td>
+            <td>
+                @{
+                // 対応するItemNameを取得する
+                var instiName = ViewBag.InstiDictionary[(item.InstiId)];
+                }
+                @instiName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Way)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_at)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

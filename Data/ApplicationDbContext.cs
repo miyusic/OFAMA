@@ -18,6 +18,11 @@ namespace OFAMA.Data
         public DbSet<OFAMA.Models.Merchandise>? Merchandise { get; set; }
         public DbSet<OFAMA.Models.EquipmentManager>? EquipmentManager { get; set; }
         public DbSet<OFAMA.Models.MerchandiseManager>? MerchandiseManager { get; set; }
+        //public DbSet<OFAMA.Models.Finance> Finance { get; set; } = default!;
+
+        //public DbSet<OFAMA.Models.Borrow>? Borrow { get; set; }
+
+        //public DbSet<OFAMA.Models.Institution>? Institution { get; set; }
 
         // ユーザ登録用のモデル
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,5 +36,8 @@ namespace OFAMA.Data
         public DbSet<OFAMA.Models.RoleModel>? RoleModel { get; set; }
         public DbSet<OFAMA.Models.UserWithRoleInfo>? UserWithRoleInfo { get; set; }
         public DbSet<KeywordModel>? Keyword { get; set; }
+        public DbSet<OFAMA.Models.Institution>? Institution { get; set; }
+        public DbSet<OFAMA.Models.Finance>? Finance { get; set; }
+        public DbSet<OFAMA.Models.Borrow>? Borrow { get; set; }
     }
 }

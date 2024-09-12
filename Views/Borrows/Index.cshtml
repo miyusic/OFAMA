@@ -1,0 +1,149 @@
+﻿@model OFAMA.Models.BorrowViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
+
+<h1>立替管理</h1>
+
+<div>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規登録</a>
+</div>
+
+<!--
+<form asp-controller="Borrows" asp-action="Index" method="get">
+    <p>
+
+        状態検索:
+        <select asp-for="BorrowStatus" asp-items="Model.Statuses">
+            <option value="">全て</option>
+        </select>
+
+        用途検索: <input type="text" asp-for="SearchString" />
+        名前検索: <input type="text" asp-for="SearchNameString" />
+        <input type="submit" value="検索" />
+    </p>
+</form>
+-->
+
+
+<form asp-controller="Borrows" asp-action="Index" method="get">
+    <ul class="accordion-area">
+        <li>
+            <section>
+                <h3 class="accordiontitle">絞り込み検索</h3>
+                <div class="accordionbox">
+                    <div>返却状態検索</div>
+                    <div>
+                        <select asp-for="BorrowStatus" asp-items="Model.Statuses">
+                            <option value="">全て</option>
+                        </select>
+                    </div>
+                    <div>用途</div>
+                    <div><input type="text" asp-for="SearchString" /></div>
+                    <div>ユーザ名</div>
+                    <div><input type="text" asp-for="SearchNameString" /></div>
+
+                    <!--
+                    <div>期間を指定</div>
+                    <div> </div>
+                    <div><開始日></div>
+                   
+                    <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
+                    <div><終了日></div>
+                    <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+                    -->
+                </div>
+            </section>
+        </li>
+    </ul>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="~/js/accordionpanel.js"></script>
+</form>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].BorrowMoney)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].Usage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].BorrowDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].ReturnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows[0].Updated_at)
+            </th>
+            <th></th>
+            <th><!--@Html.DisplayNameFor(model => model.Borrows[0].Status)--></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Borrows) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @{
+                // 対応するItemNameを取得する
+                //var userName = item.UserId;
+                var userName = ViewBag.UserDictionary[(item.UserId)];
+                }
+                @userName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BorrowMoney)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BorrowDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_at)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+            <td>
+                @if (item.Status != "済")
+                {
+                    <a asp-action="Return" asp-route-id="@item.Id" class="btn btn-success btn-sm">返却</a>
+                }
+                else
+                {
+                    <span></span>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

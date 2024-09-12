@@ -43,9 +43,12 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">会計管理</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">会計管理</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" data-target="Home">支払機関登録</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Finances" asp-action="Index" data-target="Finances">会計管理</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Institutions" asp-action="Index" data-target="Institutions">支払機関登録</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Borrows" asp-action="Index" data-target="Borrows">立替管理</a>
                         </li>
                      
                         <li class="nav-item">

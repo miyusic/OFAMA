@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OFAMA.Areas.Identity.Pages.Account
+namespace OFAMA.Models
 {
     public class KeywordModel
     {
