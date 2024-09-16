@@ -7,13 +7,14 @@ namespace OFAMA.Models
         [Key]
         public string Id { get; set; }
         public string UserName { get; set; }
-
+        /*
         [EmailAddress]
         [Display(Name = "メールアドレス")]
         public string Email { get; set; }
 
         [Display(Name = "メール確認済")]
         public bool EmailConfirmed { get; set; }
+        */
 
         public UserViewModel()
         {
@@ -22,7 +23,8 @@ namespace OFAMA.Models
         }
         public IList<RoleInfo> UserRoles { set; get; }
 
-       
+        public int UserRoleSum { set; get; }
+
 
 
     }

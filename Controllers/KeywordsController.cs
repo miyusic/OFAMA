@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OFAMA.Models;
 using OFAMA.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OFAMA.Controllers
 {
+    [Authorize(Roles = "Keyword")]
     public class KeywordsController : Controller
     {
         private readonly ApplicationDbContext _context;

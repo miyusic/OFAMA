@@ -6,7 +6,7 @@ using System.Net;
 using System.ComponentModel.DataAnnotations;
 using OFAMA.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace OFAMA.Controllers
 {
@@ -41,8 +41,8 @@ namespace OFAMA.Controllers
                 {
                     Id = user.Id,
                     UserName = user.UserName,
-                    Email = user.Email,
-                    EmailConfirmed = user.EmailConfirmed,
+                    //Email = user.Email,
+                    //EmailConfirmed = user.EmailConfirmed,
 
                 };
 
@@ -64,7 +64,8 @@ namespace OFAMA.Controllers
 
         //Get:Users/Details/5
         //もともとはDetails(int ? id)だった
-        /*
+        [Authorize(Roles = "Role_View")]
+        
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null )
@@ -76,6 +77,30 @@ namespace OFAMA.Controllers
             {
                 return NotFound();
             }
+            var model = new List<UserViewModel>();
+
+            var users = await _userManager.Users.
+                        OrderBy(user => user.UserName).ToListAsync();
+            var roles = await _roleManager.Roles.
+                        OrderBy(role => role.Name).ToListAsync();
+
+            var info = new UserViewModel
+            {
+                Id = user.Id,
+
+            };
+
+            foreach (IdentityRole role in roles)
+            {
+                RoleInfo roleInfo = new RoleInfo();
+                roleInfo.RoleName = role.Name;
+                roleInfo.IsInThisRole = await _userManager.
+                                        IsInRoleAsync(user, role.Name);
+                info.UserRoles.Add(roleInfo);
+            }
+            model.Add(info);
+
+            /*
             var model =new UserModel
             {
                 Id = user.Id,
@@ -84,17 +109,10 @@ namespace OFAMA.Controllers
                 EmailConfirmed = user.EmailConfirmed,
                 
             };
+            */
             return View(model);
         }
-        */
-
-        //Get:USers/Create
         /*
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         //POST:Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -122,7 +140,7 @@ namespace OFAMA.Controllers
             return View(model);
         }
         */
-
+        [Authorize(Roles = "User_PasswordChange")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -152,6 +170,7 @@ namespace OFAMA.Controllers
         // なかった。（実際どのように対処しているかは不明）
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User_PasswordChange")]
         public async Task<IActionResult> Edit(string id,
             [Bind("UserName,Email,Password,ConfirmPassword,Status,Authority")] EditViewModel model)
         {
@@ -227,6 +246,7 @@ namespace OFAMA.Controllers
         // Model は UserModel
         // 階層更新が行われているようでロールがアサインされている
         // ユーザーも削除可
+        [Authorize(Roles = "User_Delete")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -259,6 +279,7 @@ namespace OFAMA.Controllers
         // ActionName("Delete") を設定する
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User_Delete")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (id == null)

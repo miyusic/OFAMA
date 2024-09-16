@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OFAMA.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>RoleDetails</h1>
+
+<div style="text-align:center">
+    <table class="table">
+        <thread>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model =>model.UserRoles)
+                </th>
+            </tr>
+        </thread>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @for (int i = 0; i < item.UserRoles.Count; i++)
+                {
+                <td>
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
+                        @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
+                </td>
+
+                }
+
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
