@@ -9,6 +9,7 @@ namespace OFAMA.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.RenameColumn(
                 name: "Update_at",
                 table: "Keyword",
@@ -30,10 +31,12 @@ namespace OFAMA.Data.Migrations
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+            */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.DropColumn(
                 name: "Created_at",
                 table: "Keyword");
@@ -50,6 +53,7 @@ namespace OFAMA.Data.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
+            */
         }
     }
 }
