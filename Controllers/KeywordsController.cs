@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace OFAMA.Controllers
 {
-    //[Authorize(Roles = "Keyword")]
+    //[Authorize(Roles = "Keyword_All, Admin_Dev")]
     public class KeywordsController : Controller
     {
         private readonly ApplicationDbContext _context;

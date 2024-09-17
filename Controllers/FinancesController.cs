@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,6 +24,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Finances
+        //[Authorize(Roles = "Finance_View, Admin_Dev")]
         public async Task<IActionResult> Index(string financeReceived, string financeInstitution,string searchString, string searchNameString)
         {
             var instituteQuery = _context.Institution
@@ -143,6 +145,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Finances/Create
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public IActionResult Create()
         {
             var institutions = _context.Institution
@@ -164,6 +167,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,UserId,Money,Received,InstiId,Way,Created_at")] Finance finance)
         {
             // CreateDateがデフォルト値の場合にエラーを追加
@@ -182,6 +186,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Finances/Edit/5
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Finance == null)
@@ -211,6 +216,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Money,Received,InstiId,Way,Created_at")] Finance finance)
         {
             if (id != finance.Id)
@@ -243,6 +249,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Finances/Delete/5
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Finance == null)
@@ -267,6 +274,7 @@ namespace OFAMA.Controllers
         // POST: Finances/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Finance_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Finance == null)

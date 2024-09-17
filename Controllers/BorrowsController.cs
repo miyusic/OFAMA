@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,6 +27,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows
+        //[Authorize(Roles = "Borrow_View, Admin_Dev")]
         public async Task<IActionResult> Index(string borrowStatus, string searchString, string searchNameString)
         {
             // Borrowテーブルから全てのジャンルを取得するLINQクエリ
@@ -94,6 +96,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Create
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public IActionResult Create()
         {
             //ユーザリスト
@@ -109,6 +112,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate")] Borrow borrow)
         {
             if (ModelState.IsValid)
@@ -122,6 +126,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Edit/5
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             //ログインしていない場合
@@ -161,6 +166,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate,Updated_at")] Borrow borrow)
         {
             if (id != borrow.Id)
@@ -193,6 +199,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Delete/5
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             //ログインしていない場合
@@ -228,6 +235,7 @@ namespace OFAMA.Controllers
         // POST: Borrows/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Borrow == null)
@@ -245,6 +253,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Return/5
+        //[Authorize(Roles = "Borrow_Return, Admin_Dev")]
         public async Task<IActionResult> Return(int? id)
         {
 
@@ -265,6 +274,7 @@ namespace OFAMA.Controllers
         // POST: Borrows/Return/5
         [HttpPost, ActionName("Return")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Borrow_Return, Admin_Dev")]
         public async Task<IActionResult> ReturnConfirmed(int id, DateTime returnDate, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
         {
             if (_context.Borrow == null)

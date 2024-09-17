@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Institutions
+        //[Authorize(Roles = "Institution_View, Admin_Dev")]
         public async Task<IActionResult> Index()
         {
             var institutions = await _context.Institution.ToListAsync();
@@ -30,6 +32,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Institutions/Create
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public IActionResult Create()
         {
             return View();
@@ -40,6 +43,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,Name")] Institution institution)
         {
             if (ModelState.IsValid)
@@ -61,6 +65,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Institutions/Edit/5
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Institution == null)
@@ -83,6 +88,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Institution institution)
         {
             if (id != institution.Id)
@@ -123,6 +129,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Institutions/Delete/5
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Institution == null)
@@ -143,6 +150,7 @@ namespace OFAMA.Controllers
         // POST: Institutions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Institution_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Institution == null || _context.Finance == null)

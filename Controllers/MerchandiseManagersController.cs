@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,6 +29,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: MerchandiseManagers
+        //[Authorize(Roles = "MerchMng_View, Admin_Dev")]
         public async Task<IActionResult> Index
             (
                 string searchNameString, 
@@ -155,6 +157,7 @@ namespace OFAMA.Controllers
         */
 
         // GET: MerchandiseManagers/Create
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public IActionResult Create()
         {
             //ユーザリスト
@@ -181,6 +184,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,MerchId,UserId,Amount,Created_at")] MerchandiseManager merchandiseManager)
         {
             if (ModelState.IsValid)
@@ -196,6 +200,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: MerchandiseManagers/Edit/5
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             //ログインしていない場合
@@ -243,6 +248,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,MerchId,UserId,Amount,Created_at")] MerchandiseManager merchandiseManager)
         {
             if (id != merchandiseManager.Id)
@@ -276,6 +282,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: MerchandiseManagers/Delete/5
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             //ログインしていない場合
@@ -323,6 +330,7 @@ namespace OFAMA.Controllers
         // POST: MerchandiseManagers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.MerchandiseManager == null)
@@ -340,6 +348,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: MerchandiseManagers/Move/5
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Move(int? id)
         {
             //ログインしていない場合
@@ -406,6 +415,7 @@ namespace OFAMA.Controllers
         // POST: MerchandiseManagers/Move/5
         [HttpPost, ActionName("Move")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "MerchMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> MoveData(int id, [Bind("UserId1,Amount1,UserId2,Amount2,UserId3,Amount3")] ItemManagerMove itemmernagemove)
         {
 

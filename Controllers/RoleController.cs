@@ -24,7 +24,7 @@ namespace OFAMA.Controllers
         }
         // GET: Role/Index
         // Model は RoleModel
-        //[Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> Index()
         {
             var roles = from r in _roleManager.Roles
@@ -46,6 +46,7 @@ namespace OFAMA.Controllers
         // GET: Role/Create
         // Model は RoleModel クラス
         //[Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +56,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,Name")] RoleModel rolemodel)
         {
 
@@ -92,7 +94,7 @@ namespace OFAMA.Controllers
         // GET: Role/Edit/5
         // Edit でできるのはロール名の変更のみ
         // Model は RoleModel クラス
-        /*
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -118,6 +120,7 @@ namespace OFAMA.Controllers
         // POST: Role/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> Edit(string id,
                         [Bind("Id,Name")] RoleModel model)
         {
@@ -165,6 +168,7 @@ namespace OFAMA.Controllers
         // 階層更新が行われているようで、ユーザーがアサインされて
         // いるロールも削除可能。
         // Model は RoleModel
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -194,6 +198,7 @@ namespace OFAMA.Controllers
         // に ActionName("Delete") を設定する
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Role_VCED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (id == null)
@@ -235,7 +240,7 @@ namespace OFAMA.Controllers
 
             return View(model);
         }
-        */
+        
         // 以下は:
         // (1) UserWithRoles で登録済みユーザーの一覧と各ユーザーへの
         //     ロールのアサイン状況を表示し、
@@ -247,11 +252,7 @@ namespace OFAMA.Controllers
         // ユーザー一覧と各ユーザーにアサインされているロールを表示
         // Model は UserWithRoleInfo クラス
 
-        /*
-        [Authorize(Roles = "Regular")]
-        [Authorize(Roles = "developer")]
-        */
-        //[Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_ADet, Admin_Dev")]
         public async Task<IActionResult> UserWithRoles()
         {
             var model = new List<UserWithRoleInfo>();
@@ -292,6 +293,7 @@ namespace OFAMA.Controllers
         // 指定 Id のユーザーのロールへのアサインの編集
         // Model は UserWithRoleInfo クラス
         //[Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_ADet, Admin_Dev")]
         public async Task<IActionResult> EditRoleAssignment(string id)
         {
             if (id == null)
@@ -333,6 +335,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_ADet, Admin_Dev")]
         public async Task<IActionResult> EditRoleAssignment(string id,
           [Bind("UserId,UserName,UserEmail,UserRoles")] UserWithRoleInfo model)
         {

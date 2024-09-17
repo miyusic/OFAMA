@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,6 +29,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: EquipmentManagers
+        //[Authorize(Roles = "EquipMng_View, Admin_Dev")]
         public async Task<IActionResult> Index(string searchNameString,string searchEquipString, DateTime? startDate,DateTime? endDate)
         {
             //データのリスト
@@ -169,6 +171,7 @@ namespace OFAMA.Controllers
         */
 
         // GET: EquipmentManagers/Create
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public IActionResult Create()
         {
             //ユーザリスト
@@ -191,6 +194,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,EquipId,UserId,Amount,Created_at")] EquipmentManager equipmentManager)
         {
             if (ModelState.IsValid)
@@ -206,6 +210,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: EquipmentManagers/Edit/5
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             //ログインしていない場合
@@ -255,6 +260,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EquipId,UserId,Amount,Created_at")] EquipmentManager equipmentManager)
         {
             if (id != equipmentManager.Id)
@@ -288,6 +294,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: EquipmentManagers/Delete/5
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             //ログインしていない場合
@@ -337,6 +344,7 @@ namespace OFAMA.Controllers
         // POST: EquipmentManagers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.EquipmentManager == null)
@@ -354,6 +362,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: EquipmentManagers/Move/5
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> Move(int? id)
         {
             //ログインしていない場合
@@ -421,6 +430,7 @@ namespace OFAMA.Controllers
         // POST: EquipmentManagers/Move/5
         [HttpPost, ActionName("Move")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "EquipMng_CEMD, Admin_Dev")]
         public async Task<IActionResult> MoveData(int id, [Bind("UserId1,Amount1,UserId2,Amount2,UserId3,Amount3")] ItemManagerMove equipmernagemove)
         {
 

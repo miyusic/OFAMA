@@ -23,6 +23,7 @@ namespace OFAMA.Controllers
 
         //1.10追加
         //Get
+        //[Authorize(Roles = "User_View, Admin_Dev")]
         public async Task<IActionResult> Index()
         {
             var model = new List<UserViewModel>();
@@ -73,7 +74,8 @@ namespace OFAMA.Controllers
         //Get:Users/Details/5
         //もともとはDetails(int ? id)だった
         //[Authorize(Roles = "Role_View")]
-        
+        //[Authorize(Roles = "Role_ADet, Admin_Dev")]
+
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null )
@@ -149,6 +151,7 @@ namespace OFAMA.Controllers
         }
         */
         //[Authorize(Roles = "User_PasswordChange")]
+        //[Authorize(Roles = "Password_Reset, Admin_Dev")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -179,6 +182,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "User_PasswordChange")]
+        //[Authorize(Roles = "Password_Reset, Admin_Dev")]
         public async Task<IActionResult> Edit(string id,
             [Bind("UserName,Email,Password,ConfirmPassword,Status,Authority")] EditViewModel model)
         {
@@ -255,6 +259,7 @@ namespace OFAMA.Controllers
         // 階層更新が行われているようでロールがアサインされている
         // ユーザーも削除可
         //[Authorize(Roles = "User_Delete")]
+        //[Authorize(Roles = "User_Delete, Admin_Dev")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -288,6 +293,7 @@ namespace OFAMA.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "User_Delete")]
+        //[Authorize(Roles = "User_Delete, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (id == null)
