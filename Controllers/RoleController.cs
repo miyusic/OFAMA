@@ -24,7 +24,7 @@ namespace OFAMA.Controllers
         }
         // GET: Role/Index
         // Model は RoleModel
-        [Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_Create")]
         public async Task<IActionResult> Index()
         {
             var roles = from r in _roleManager.Roles
@@ -45,7 +45,7 @@ namespace OFAMA.Controllers
 
         // GET: Role/Create
         // Model は RoleModel クラス
-        [Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_Create")]
         public IActionResult Create()
         {
             return View();
@@ -54,7 +54,7 @@ namespace OFAMA.Controllers
         // POST: Role/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Role_Create")]
+        //[Authorize(Roles = "Role_Create")]
         public async Task<IActionResult> Create([Bind("Id,Name")] RoleModel rolemodel)
         {
 
@@ -251,7 +251,7 @@ namespace OFAMA.Controllers
         [Authorize(Roles = "Regular")]
         [Authorize(Roles = "developer")]
         */
-        [Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_Assign")]
         public async Task<IActionResult> UserWithRoles()
         {
             var model = new List<UserWithRoleInfo>();
@@ -291,7 +291,7 @@ namespace OFAMA.Controllers
         // GET: Role/EditRoleAssignment/Id
         // 指定 Id のユーザーのロールへのアサインの編集
         // Model は UserWithRoleInfo クラス
-        [Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_Assign")]
         public async Task<IActionResult> EditRoleAssignment(string id)
         {
             if (id == null)
@@ -332,7 +332,7 @@ namespace OFAMA.Controllers
         // POST: Role/EditRoleAssignment/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Role_Assign")]
+        //[Authorize(Roles = "Role_Assign")]
         public async Task<IActionResult> EditRoleAssignment(string id,
           [Bind("UserId,UserName,UserEmail,UserRoles")] UserWithRoleInfo model)
         {

@@ -23,9 +23,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
-<th>
+        <th>
                 @Html.DisplayNameFor(model =>model.UserRoleSum)
             </th>
+            <th></th>
         </tr>
     </thead>
     
@@ -52,7 +53,7 @@
                 -->
                 <td>
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">ResetPassword</a>
-                        <a asp-action="Details" asp-route-id="@item.Id">RoleDetail</a> 
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">RoleDetail</a> 
                         <a asp-controller="Role" asp-action="EditRoleAssignment" asp-route-id="@item.Id" class="btn btn-info btn-sm">AddStatus</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a> 
                        
