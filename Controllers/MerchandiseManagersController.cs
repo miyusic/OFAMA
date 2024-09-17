@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,13 @@ namespace OFAMA.Controllers
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public MerchandiseManagersController(UserManager<IdentityUser> userManager,ApplicationDbContext context)
+        private readonly Claim _claim;
+
+        public MerchandiseManagersController(IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager,ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
+            _claim = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
         }
 
         // GET: MerchandiseManagers
@@ -194,6 +198,30 @@ namespace OFAMA.Controllers
         // GET: MerchandiseManagers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+            }
+
+            if (id == null || _context.MerchandiseManager == null)
+            {
+                return NotFound();
+            }
+
+            var merchandiseManager = await _context.MerchandiseManager.FindAsync(id);
+            if (merchandiseManager == null)
+            {
+                return NotFound();
+            }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != merchandiseManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
+
             //ユーザリスト
             var users = _userManager.Users
                 .Select(user => new { user.Id, user.UserName })
@@ -205,16 +233,8 @@ namespace OFAMA.Controllers
                 .Select(m => new { m.Id, m.ItemName })
                 .OrderBy(user => user.ItemName);
             ViewBag.Merchs = new SelectList(merchs, "Id", "ItemName");
-            if (id == null || _context.MerchandiseManager == null)
-            {
-                return NotFound();
-            }
+            ViewBag.Merchs = new SelectList(merchs, "Id", "ItemName");
 
-            var merchandiseManager = await _context.MerchandiseManager.FindAsync(id);
-            if (merchandiseManager == null)
-            {
-                return NotFound();
-            }
             return View(merchandiseManager);
         }
 
@@ -258,6 +278,12 @@ namespace OFAMA.Controllers
         // GET: MerchandiseManagers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+            }
+
             if (id == null || _context.MerchandiseManager == null)
             {
                 return NotFound();
@@ -265,6 +291,17 @@ namespace OFAMA.Controllers
 
             var merchandiseManager = await _context.MerchandiseManager
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if (merchandiseManager == null)
+            {
+                return NotFound();
+            }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != merchandiseManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
 
             //ユーザ名を取得
             var username = await _userManager.Users
@@ -279,11 +316,6 @@ namespace OFAMA.Controllers
                 .Select(m => m.ItemName)
                 .FirstOrDefaultAsync();
             ViewBag.MerchName = merchname;
-
-            if (merchandiseManager == null)
-            {
-                return NotFound();
-            }
 
             return View(merchandiseManager);
         }
@@ -310,6 +342,12 @@ namespace OFAMA.Controllers
         // GET: MerchandiseManagers/Move/5
         public async Task<IActionResult> Move(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+            }
+
             if (id == null || _context.MerchandiseManager == null)
             {
                 return NotFound();
@@ -320,6 +358,13 @@ namespace OFAMA.Controllers
             if (merchManager == null)
             {
                 return NotFound();
+            }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != merchManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
             }
 
             /* 表示データ */
@@ -530,6 +575,17 @@ namespace OFAMA.Controllers
             return View(itemmernagemove);
         }
 
+        //管理者のアクセス制限を判定する関数
+        private bool JudgeAdminAccess()
+        {
+            // 1. ユーザーが権限を持っているか確認
+            if (User.IsInRole("Admin_Dev"))
+            {
+                // 権限がある場合は
+                return true;
+            }
+            return false;
+        }
         private bool MerchandiseManagerExists(int id)
         {
           return (_context.MerchandiseManager?.Any(e => e.Id == id)).GetValueOrDefault();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace OFAMA.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly Claim _claim;
 
-        public BorrowsController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public BorrowsController(IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
+            _claim = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
         }
 
         // GET: Borrows
@@ -121,6 +124,13 @@ namespace OFAMA.Controllers
         // GET: Borrows/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+
+            }
+
             if (id == null || _context.Borrow == null)
             {
                 return NotFound();
@@ -131,6 +141,13 @@ namespace OFAMA.Controllers
             {
                 return NotFound();
             }
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != borrow.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
+
             //ユーザリスト
             var users = _userManager.Users
                 .Select(user => new { user.Id, user.UserName })
@@ -178,6 +195,13 @@ namespace OFAMA.Controllers
         // GET: Borrows/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+
+            }
+
             if (id == null || _context.Borrow == null)
             {
                 return NotFound();
@@ -185,11 +209,18 @@ namespace OFAMA.Controllers
 
             var borrow = await _context.Borrow
                 .FirstOrDefaultAsync(m => m.Id == id);
-            ViewBag.userName=await _userManager.Users.FirstOrDefaultAsync(m => m.Id == borrow.UserId);
             if (borrow == null)
             {
                 return NotFound();
             }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != borrow.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
+            ViewBag.userName = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == borrow.UserId);
 
             return View(borrow);
         }
@@ -216,6 +247,7 @@ namespace OFAMA.Controllers
         // GET: Borrows/Return/5
         public async Task<IActionResult> Return(int? id)
         {
+
             if (id == null || _context.Borrow == null)
             {
                 return NotFound();
@@ -261,6 +293,18 @@ namespace OFAMA.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        //管理者のアクセス制限を判定する関数
+        private bool JudgeAdminAccess()
+        {
+            // 1. ユーザーが権限を持っているか確認
+            if (User.IsInRole("Admin_Dev"))
+            {
+                // 権限がある場合は
+                return true;
+            }
+            return false;
         }
 
         private bool BorrowExists(int id)

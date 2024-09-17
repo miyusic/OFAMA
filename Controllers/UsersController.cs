@@ -37,13 +37,14 @@ namespace OFAMA.Controllers
 
             foreach (IdentityUser user in users)
             {
+                //初期化
+                int role_cnt = 0;
                 var info = new UserViewModel
                 {
                     Id = user.Id,
                     UserName = user.UserName,
                     //Email = user.Email,
                     //EmailConfirmed = user.EmailConfirmed,
-
                 };
 
                 foreach (IdentityRole role in roles)
@@ -52,8 +53,15 @@ namespace OFAMA.Controllers
                     roleInfo.RoleName = role.Name;
                     roleInfo.IsInThisRole = await _userManager.
                                             IsInRoleAsync(user, role.Name);
+                    //チェックの分だけカウントする
+                    if (roleInfo.IsInThisRole)
+                    {
+                        role_cnt++;
+                    }
                     info.UserRoles.Add(roleInfo);
                 }
+                info.UserRoleSum = role_cnt;
+
                 model.Add(info);
             }
 

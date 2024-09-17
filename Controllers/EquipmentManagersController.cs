@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,13 @@ namespace OFAMA.Controllers
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public EquipmentManagersController(UserManager<IdentityUser> userManager,ApplicationDbContext context)
+        private readonly Claim _claim;
+
+        public EquipmentManagersController(IHttpContextAccessor httpContextAccessor,UserManager<IdentityUser> userManager,ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
+            _claim = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
         }
 
         // GET: EquipmentManagers
@@ -204,6 +208,31 @@ namespace OFAMA.Controllers
         // GET: EquipmentManagers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+
+            }
+            if (id == null || _context.EquipmentManager == null)
+            {
+                return NotFound();
+            }
+
+            var equipmentManager = await _context.EquipmentManager.FindAsync(id);
+            if (equipmentManager == null)
+            {
+                return NotFound();
+            }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != equipmentManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
+
+
             //ユーザリスト
             var users = _userManager.Users
                 .Select(user => new { user.Id, user.UserName })
@@ -215,17 +244,10 @@ namespace OFAMA.Controllers
                 .Select(m => new { m.Id, m.ItemName })
                 .OrderBy(user => user.ItemName);
             ViewBag.Eqips = new SelectList(equips, "Id", "ItemName");
-            if (id == null || _context.EquipmentManager == null)
-            {
-                return NotFound();
-            }
 
-            var equipmentManager = await _context.EquipmentManager.FindAsync(id);
-            if (equipmentManager == null)
-            {
-                return NotFound();
-            }
             return View(equipmentManager);
+        
+
         }
 
         // POST: EquipmentManagers/Edit/5
@@ -268,6 +290,13 @@ namespace OFAMA.Controllers
         // GET: EquipmentManagers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+
+            }
+            
             if (id == null || _context.EquipmentManager == null)
             {
                 return NotFound();
@@ -275,6 +304,13 @@ namespace OFAMA.Controllers
 
             var equipmentManager = await _context.EquipmentManager
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != equipmentManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
+            }
 
             //ユーザ名を取得
             var username = await _userManager.Users
@@ -320,6 +356,13 @@ namespace OFAMA.Controllers
         // GET: EquipmentManagers/Move/5
         public async Task<IActionResult> Move(int? id)
         {
+            //ログインしていない場合
+            if (_claim == null)
+            {
+                return Forbid();
+
+            }
+
             if (id == null || _context.EquipmentManager == null)
             {
                 return NotFound();
@@ -330,6 +373,13 @@ namespace OFAMA.Controllers
             if (equipmentManager == null)
             {
                 return NotFound();
+            }
+
+            //ログインIDで制御
+            var loginusernameid = _claim.Value;
+            if ((loginusernameid != equipmentManager.UserId) & !(JudgeAdminAccess()))
+            {
+                return Forbid();
             }
 
             /* 表示データ */
@@ -538,6 +588,18 @@ namespace OFAMA.Controllers
                 }
             }
             return View(equipmernagemove);
+        }
+
+        //管理者のアクセス制限を判定する関数
+        private bool JudgeAdminAccess()
+        {
+            // 1. ユーザーが権限を持っているか確認
+            if (User.IsInRole("Admin_Dev") )
+            {
+                // 権限がある場合は
+                return true;
+            }
+            return false;
         }
 
 
