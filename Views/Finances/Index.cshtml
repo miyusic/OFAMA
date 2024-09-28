@@ -13,7 +13,12 @@
 <h3 class="heading">会計管理</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">新規登録</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    <form asp-controller="Finances" asp-action="Index" method="get">
+        <p>
+            <input type="submit" value="全データ表示" class="btn btn-outline-primary btn-lg" />
+        </p>
+    </form>
 </p>
 
 <!--
