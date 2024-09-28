@@ -10,10 +10,10 @@
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
 
-<h1>会計管理</h1>
+<h3 class="heading">会計管理</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規登録</a>
 </p>
 
 <!--
@@ -60,7 +60,7 @@
 
                     <div>用途</div>
                     <div><input type="text" asp-for="SearchString" /></div>
-
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
                     <!--
                     <div>期間を指定</div>
                     <div> </div>
@@ -69,7 +69,6 @@
                     <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
                     <div><終了日></div>
                     <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
-                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
                     -->
                 </div>
             </section>

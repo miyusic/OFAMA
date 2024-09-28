@@ -9,9 +9,8 @@
     <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
-<h1>Create</h1>
+<h1 class="heading">Create</h1>
 
-<h4>Finance</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -56,7 +55,7 @@
                 <span asp-validation-for="Created_at" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary me-3" />
                 <a asp-action="Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
