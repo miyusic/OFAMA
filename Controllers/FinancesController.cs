@@ -32,12 +32,17 @@ namespace OFAMA.Controllers
             .Select(i => i.Name)
             .Distinct();
 
-            // Create a dictionary for institution names
+            // 機関名
             var institutionDictionary = await _context.Institution
                 .ToDictionaryAsync(i => i.Id, i => i.Name);
 
-            // Add the dictionary to ViewBag
+            // ViewBagに辞書を設定
             ViewBag.InstitutionDictionary = institutionDictionary;
+
+            // ユーザの名前
+            var userDictionary = _userManager.Users.ToDictionary(e => e.Id);
+            // ViewBagに辞書を設定
+            ViewBag.UserDictionary = userDictionary;
 
 
             // 機関名のリストを取得するクエリを構築
@@ -118,16 +123,6 @@ namespace OFAMA.Controllers
                 }).ToListAsync();
 
             var moneytotal = wayTotalAmounts.Sum(item => item.Total);
-
-            // ユーザの名前
-            var userDictionary = _userManager.Users.ToDictionary(e => e.Id);
-            // ViewBagに辞書を設定
-            ViewBag.UserDictionary = userDictionary;
-
-            // 機関名
-            var instiDictionary = _context.Institution.ToDictionary(e => e.Id, e => e.Name);
-            // ViewBagに辞書を設定
-            ViewBag.InstiDictionary = instiDictionary;
 
             // ViewModelの構築
             var financeVM = new FinanceViewModel
