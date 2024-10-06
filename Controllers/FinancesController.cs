@@ -25,7 +25,7 @@ namespace OFAMA.Controllers
 
         // GET: Finances
         //[Authorize(Roles = "Finance_View, Admin_Dev")]
-        public async Task<IActionResult> Index(string financeReceived, string financeInstitution,string searchString, string searchNameString)
+        public async Task<IActionResult> Index(string financeReceived, string financeInstitution, string searchString, string searchNameString)
         {
             var instituteQuery = _context.Institution
             .OrderBy(i => i.Name)
@@ -60,7 +60,7 @@ namespace OFAMA.Controllers
             // アカウントの基本クエリ
             var finances = _context.Finance.AsQueryable();
 
-            // 用途検索処理
+            // フィルタリング処理
             if (!string.IsNullOrEmpty(searchString))
             {
                 finances = finances.Where(s => s.Way.Contains(searchString));
@@ -73,11 +73,11 @@ namespace OFAMA.Controllers
                     .Join
                     (
                         _userManager.Users,
-                        finances => finances.UserId,
+                        finance => finance.UserId,
                         user => user.Id,
-                        (finances, user) => new
+                        (finance, user) => new
                         {
-                            Finance = finances,
+                            Finance = finance,
                             UserName = user.UserName
                         }
                     )
@@ -112,26 +112,42 @@ namespace OFAMA.Controllers
                 finances = finances.Where(x => x.Received == financeReceived);
             }
 
-            // 用途ごとの合計金額を計算
-            // 合計金額の計算はデータベースクエリで直接行う
-            var wayTotalAmounts = await finances
-                .GroupBy(a => a.Received)
+            // フィルタ済みの財務データをリスト化
+            var filteredFinances = await finances.ToListAsync();
+
+            // 機関ごとの合計金額を計算
+            var institutionTotalAmounts = filteredFinances
+                .GroupBy(f => f.InstiId)
                 .Select(group => new
                 {
-                    ReceivedType = group.Key.ToString(),
-                    Total = group.Sum(a => a.Received == "入金" ? a.Money : -a.Money)
-                }).ToListAsync();
+                    InstitutionId = group.Key,
+                    Total = group.Sum(f => f.Received == "入金" ? f.Money : -f.Money)
+                })
+                .ToList();
 
-            var moneytotal = wayTotalAmounts.Sum(item => item.Total);
+            // 機関名を合計金額にマッピングして辞書に変換
+            Dictionary<string, decimal> institutionTotalAmountDictionary = new Dictionary<string, decimal>();
+
+            foreach (var item in institutionTotalAmounts)
+            {
+                if (institutionDictionary.ContainsKey(item.InstitutionId))
+                {
+                    institutionTotalAmountDictionary[institutionDictionary[item.InstitutionId]] = item.Total;
+                }
+            }
+
+            // 全体の合計金額をフィルタ済みのデータから計算
+            var totalAmount = filteredFinances
+                .Sum(f => f.Received == "入金" ? f.Money : -f.Money);
 
             // ViewModelの構築
             var financeVM = new FinanceViewModel
             {
                 Institutions = new SelectList(await instiQuery.ToListAsync()),
                 Receiveds = new SelectList(await receivedQuery.ToListAsync()),
-                Finances = await finances.ToListAsync(),
-                Financemoneytotal = moneytotal,
-                WayTotalAmounts = wayTotalAmounts.Sum(w => w.Total)
+                Finances = filteredFinances,
+                Financemoneytotal = totalAmount, // 全体の合計金額
+                InstitutionTotalAmounts = institutionTotalAmountDictionary // 機関ごとの合計
             };
 
             return _context.Finance != null ? 

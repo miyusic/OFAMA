@@ -21,6 +21,33 @@
     </form>
 </p>
 
+<h3>機関ごとの合計金額</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>機関名</th>
+            <th>合計金額</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.InstitutionTotalAmounts)
+        {
+            <tr>
+                <td>@item.Key</td>
+                <td>@item.Value</td> <!-- 各機関ごとの合計をここに表示 -->
+            </tr>
+        }
+
+        <!-- Total row added here -->
+        <tr class="total-row">
+            <td><strong>総合計</strong></td>
+            <td><strong>@Model.Financemoneytotal</strong></td> <!-- 合計金額を表示 -->
+        </tr>
+
+    </tbody>
+</table>
+
+
 <!--
 <form asp-controller="Finances" asp-action="Index" method="get">
     <p>

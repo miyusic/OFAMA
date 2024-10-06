@@ -15,5 +15,6 @@ namespace OFAMA.Models
         public string? SearchNameString { get; set; }
         public int? Financemoneytotal { get; set; }
         public int? WayTotalAmounts { get; set; }
+        public Dictionary<string, decimal>? InstitutionTotalAmounts { get; set; }
     }
 }
