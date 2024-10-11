@@ -110,3 +110,8 @@ accordionh2 {
   margin: 30px 0;
   font-size: 1rem;
 }
+
+tr.total-row {
+    /*コレ*/ border-top: 2px solid #333 !important;
+    /*コレ*/ border-bottom: 1px solid #333 !important;
+}

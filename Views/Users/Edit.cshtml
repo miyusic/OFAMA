@@ -4,8 +4,6 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1 class="heading">パスワード再設定</h1　class>
-
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
@@ -14,7 +12,7 @@
 
 
 </head>
-
+<h3 class="heading"> パスワード再設定</h3>
 
 <hr />
 <div class="row">
@@ -22,26 +20,26 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserName" />
-            
+
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <span asp-validation-for="Password"></span>
             </div>
             <p>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-           </p>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword"></span>
+                </div>
+            </p>
             <div class="form-group">
                 <p>
-                <input type="submit" value="Save" class="btn btn-primary me-3" />
+                    <input type="submit" value="Save" class="btn btn-primary me-3" />
                     <a asp-action="Index" class="btn btn-secondary"> Back </a>
                 </p>
             </div>
-            
+
         </form>
     </div>
 </div>

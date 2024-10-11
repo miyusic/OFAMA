@@ -21,52 +21,42 @@
     </form>
 </p>
 
-<h3>機関ごとの合計金額</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>機関名</th>
-            <th>合計金額</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.InstitutionTotalAmounts)
-        {
-            <tr>
-                <td>@item.Key</td>
-                <td>@item.Value</td> <!-- 各機関ごとの合計をここに表示 -->
-            </tr>
-        }
+<!-- 機関ごとの合計金額を表示するアコーディオンパネル -->
+<ul class="accordion-area">
+    <li>
+        <section>
+            <h3 class="accordiontitle">機関ごとの合計金額</h3>
+            <div class="accordionbox">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>機関名</th>
+                            <th>合計金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-        <!-- Total row added here -->
-        <tr class="total-row">
-            <td><strong>総合計</strong></td>
-            <td><strong>@Model.Financemoneytotal</strong></td> <!-- 合計金額を表示 -->
-        </tr>
+                        @foreach (var item in Model.InstitutionTotalAmounts)
+                        {
+                            <tr>
+                                <td>@item.Key</td>
+                                <td>@item.Value</td> <!-- 各機関ごとの合計をここに表示 -->
+                            </tr>
+                        }
 
-    </tbody>
-</table>
+                        <!-- Total row added here -->
+                        <tr class="total-row">
+                            <td><strong>総合計</strong></td>
+                            <td><strong>@Model.Financemoneytotal</strong></td> <!-- 合計金額を表示 -->
+                        </tr>
 
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </li>
+</ul>
 
-<!--
-<form asp-controller="Finances" asp-action="Index" method="get">
-    <p>
-        入出金検索:
-        <select asp-for="FinanceReceived" asp-items="Model.Receiveds">
-            <option value="">全て</option>
-        </select>
-        機関検索:
-        <select asp-for="FinanceInstitution" asp-items="Model.Institutions">
-            <option value="">全て</option>
-        </select>
-        
-        用途検索: <input type="text" asp-for="SearchString" />
-        名前検索: <input type="text" asp-for="SearchNameString" />
-        <input type="submit" value="検索" />
-    </p>
-
-</form>
--->
 <form asp-controller="Finances" asp-action="Index" method="get">
     <ul class="accordion-area">
         <li>
@@ -93,15 +83,6 @@
                     <div>用途</div>
                     <div><input type="text" asp-for="SearchString" /></div>
                     <div><input type="submit" value="検索" class="btn btn-primary" /></div>
-                    <!--
-                    <div>期間を指定</div>
-                    <div> </div>
-                    <div><開始日></div>
-                   
-                    <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
-                    <div><終了日></div>
-                    <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
-                    -->
                 </div>
             </section>
         </li>
@@ -140,43 +121,43 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Finances) {
-        <tr>
-            <td>
-                @{
-                // 対応するItemNameを取得する
-                //var userName = item.UserId;
-                var userName = ViewBag.UserDictionary[(item.UserId)];
-                }
-                @userName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Money)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Received)
-            </td>
-            <td>
-                @{
-                // 対応するItemNameを取得する
-                var instiName = ViewBag.InstitutionDictionary[(item.InstiId)];
-                }
-                @instiName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Way)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created_at)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated_at)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Finances)
+        {
+            <tr>
+                <td>
+                    @{
+                        // 対応するItemNameを取得する
+                        var userName = ViewBag.UserDictionary[(item.UserId)];
+                    }
+                    @userName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Money)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Received)
+                </td>
+                <td>
+                    @{
+                        // 対応するItemNameを取得する
+                        var instiName = ViewBag.InstitutionDictionary[(item.InstiId)];
+                    }
+                    @instiName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Way)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_at)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated_at)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

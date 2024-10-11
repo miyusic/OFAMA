@@ -6,33 +6,34 @@
 
 <h1>RoleDetails</h1>
 
-<div style="text-align:center">
-    <table class="table">
-        <thread>
+<div>
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model =>model.UserRoles)
+                    @Html.DisplayNameFor(model => model.UserRoles)
                 </th>
-                 <th></th>
+                <th></th>
             </tr>
-        </thread>
+        </thead>
 
         <tbody>
             @foreach (var item in Model)
             {
                 @for (int i = 0; i < item.UserRoles.Count; i++)
                 {
-                <td>
-                        @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
-                        @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
-                </td>
-
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelThing => item.UserRoles[i].RoleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelThing => item.UserRoles[i].IsInThisRole)
+                        </td>
+                    </tr>
                 }
-
             }
         </tbody>
     </table>
-
 </div>
 
 <div>
