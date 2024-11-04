@@ -65,7 +65,7 @@ namespace OFAMA.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "確認メールが送信されました。メールをご確認ください");
                 return Page();
             }
 
@@ -81,10 +81,10 @@ namespace OFAMA.Areas.Identity.Pages.Account
                 Input.Email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");*/
-            await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                           $"Please confirm your account by {callbackUrl}");
+            await _emailSender.SendEmailAsync(Input.Email, "メール認証",
+                           $"{callbackUrl}からアカウントを認証してください");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, "確認メールが送信されました。メールをご確認ください");
             return Page();
         }
     }

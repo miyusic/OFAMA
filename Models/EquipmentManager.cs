@@ -9,15 +9,15 @@ namespace OFAMA.Models
         [DisplayName("データID")]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "備品IDは必須項目です")]
-        [DisplayName("備品ID")]
+        [Required(ErrorMessage = "備品名は必須項目です")]
+        [DisplayName("備品名")]
         public int EquipId { get; set; }
 
-        [Required(ErrorMessage = "ユーザIDは必須項目です")]
-        [DisplayName("ユーザID")]
+        [Required(ErrorMessage = "ユーザ名は必須項目です")]
+        [DisplayName("ユーザ名")]
         public String UserId { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "数量は0以上である必要があります")]
+        [Range(1, int.MaxValue, ErrorMessage = "数量は1以上である必要があります")]
         [Required(ErrorMessage = "数量は必須項目です")]
         [DisplayName("数量")]
         public int Amount { get; set; }

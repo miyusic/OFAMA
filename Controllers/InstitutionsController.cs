@@ -24,7 +24,7 @@ namespace OFAMA.Controllers
         //[Authorize(Roles = "Institution_View, Admin_Dev")]
         public async Task<IActionResult> Index()
         {
-            var institutions = await _context.Institution.ToListAsync();
+            var institutions = await _context.Institution.OrderByDescending(x => x.Id).ToListAsync();
             ViewBag.Institutions = new SelectList(institutions, "Name");
             return _context.Institution != null ? 
                           View(institutions) :

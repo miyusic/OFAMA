@@ -12,7 +12,7 @@ namespace OFAMA.Models
 
         //備品名
         [Required(ErrorMessage = "備品名は必須項目です")]
-        [StringLength(100, ErrorMessage = "備品名は100文字以内である必要があります")]
+        [StringLength(20, ErrorMessage = "備品名は20文字以内である必要があります")]
         [DisplayName("備品名")]
         public string ItemName { get; set; }
 

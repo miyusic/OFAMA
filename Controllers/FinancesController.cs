@@ -113,7 +113,7 @@ namespace OFAMA.Controllers
             }
 
             // フィルタ済みの財務データをリスト化
-            var filteredFinances = await finances.ToListAsync();
+            var filteredFinances = await finances.OrderByDescending(x => x.Created_at).ToListAsync();
 
             // 機関ごとの合計金額を計算
             var institutionTotalAmounts = filteredFinances

@@ -63,7 +63,7 @@ namespace OFAMA.Controllers
 
             var equipExpandableVM = new EquipmentViewModel
             {
-                Equipments = await equips.ToListAsync(),
+                Equipments = await equips.OrderByDescending(x => x.Created_at).ToListAsync(),
                 Expandables = new SelectList(expandables)
             };
 

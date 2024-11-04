@@ -142,7 +142,7 @@ namespace OFAMA.Controllers
             var equipMngVM = new EquipmentManagerViewModel
             {
                 EquipIds = new SelectList(await equipNameQuery.Distinct().ToListAsync()),
-                EquipmentManagers = await equipMngs.ToListAsync()
+                EquipmentManagers = await equipMngs.OrderByDescending(x => x.Created_at).ToListAsync()
             };
 
             return equipMngVM != null ? 

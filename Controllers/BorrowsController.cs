@@ -80,7 +80,7 @@ namespace OFAMA.Controllers
             var borrowStatusVM = new BorrowViewModel
             {
                 Statuses = new SelectList(await statusQuery.Distinct().ToListAsync()),
-                Borrows = await borrows.ToListAsync()
+                Borrows = await borrows.OrderByDescending(x => x.Id).ToListAsync()
             };
             
 

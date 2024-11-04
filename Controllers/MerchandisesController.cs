@@ -56,7 +56,7 @@ namespace OFAMA.Controllers
 
             var MerchandiseVM = new MerchandiseViewModel
             {
-                Merchandises = await merchs.ToListAsync(),
+                Merchandises = await merchs.OrderByDescending(x => x.Created_at).ToListAsync(),
                 Kinds = new SelectList(await kindsQuery.Distinct().ToListAsync()),
                 Years = new SelectList(await yearsQuery.Distinct().ToListAsync())
             };

@@ -12,6 +12,7 @@
 </head>
 <h1 class="heading">Edit Role Assignment</h1>
 
+<!--
 <div class="flex-container">
     <h5>@Html.DisplayNameFor(model => model.UserName)</h5>
     <h5>
@@ -21,6 +22,7 @@
         @Html.HiddenFor(model => model.UserId)
     </h5>
 </div>
+-->
 
 <div class="row">
     <div class="col-md-4">
@@ -32,7 +34,13 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                    <td>
+                            @Html.DisplayFor(model => model.UserName)
+                            @Html.HiddenFor(model => model.UserName)
+                            @Html.HiddenFor(model => model.UserEmail)
+                            @Html.HiddenFor(model => model.UserId)
+                    </td>
+                <!--<tbody>-->
                     @for (int i = 0; i < Model.UserRoles.Count; i++)
                     {
                         <tr>
@@ -43,7 +51,7 @@
                             </td>
                         </tr>
                     }
-                </tbody>
+                <!--</tbody>-->
             </table>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary me-3" />

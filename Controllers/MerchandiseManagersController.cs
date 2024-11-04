@@ -128,7 +128,7 @@ namespace OFAMA.Controllers
             var merchMngVM = new MerchandiseManagerViewModel
             {
                 MerchKinds = new SelectList(await merchNameQuery.Distinct().ToListAsync()),
-                MerchManagers = await merchMngs.ToListAsync()
+                MerchManagers = await merchMngs.OrderByDescending(x => x.Created_at).ToListAsync()
             };
 
             return _context.MerchandiseManager != null ? 

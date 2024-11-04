@@ -11,7 +11,7 @@ namespace OFAMA.Models
         public int Id { get; set; }
 
         //商品名
-        [StringLength(100, ErrorMessage = "商品名は100文字以内である必要があります")]
+        [StringLength(20, ErrorMessage = "商品名は20文字以内である必要があります")]
         [Required(ErrorMessage = "商品名は必須項目です")]
         [DisplayName("商品名")]
         public string ItemName { get; set; }
@@ -23,7 +23,7 @@ namespace OFAMA.Models
         public int Price { get; set; }
 
         //種別のプルダウンメニュー用(CDとかキーホルダーとか)
-        [StringLength(100, ErrorMessage = "商品種別は100文字以内である必要があります")]
+        [StringLength(20, ErrorMessage = "商品種別は20文字以内である必要があります")]
         [Required(ErrorMessage = "商品種別は必須項目です")]
         [DisplayName("商品種別")]
         public String? Kind { get; set; }

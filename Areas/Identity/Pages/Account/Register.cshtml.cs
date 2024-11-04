@@ -23,28 +23,33 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OFAMA.Data;
+using OFAMA.Models;
 
 namespace OFAMA.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<IdentityUser> _userManager;
+        private readonly Microsoft.AspNetCore.Identity.IUserStore<IdentityUser> _userStore;
+        private readonly Microsoft.AspNetCore.Identity.IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         //private readonly KeywordModel _keyword;
         private readonly ApplicationDbContext _context;
+        //private  RoleController _roleController;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
 
-        
+
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
+            Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager,
+            Microsoft.AspNetCore.Identity.IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext context
+            ApplicationDbContext context,
+            Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager
+            //RoleController roleController
 
             //KeywordModel keyword
             //0427追加(削除済み)
@@ -54,7 +59,7 @@ namespace OFAMA.Areas.Identity.Pages.Account
             _userManager = userManager;
             _userStore = userStore;
             //変更 11.25
-            _emailStore = (IUserEmailStore<IdentityUser>)GetEmailStore();
+            _emailStore = (Microsoft.AspNetCore.Identity.IUserEmailStore<IdentityUser>)GetEmailStore();
             //
             _signInManager = signInManager;
             _logger = logger;
@@ -62,7 +67,9 @@ namespace OFAMA.Areas.Identity.Pages.Account
             //0427(削除済み)
             //_keyword = new KeywordModel { Id = 0, Keyword = "oto" };
             _context = context;
-            
+            //_roleController = roleController;
+            _roleManager = roleManager;
+
         }
 
         /// <summary>
@@ -95,13 +102,14 @@ namespace OFAMA.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [RegularExpression(@"[a-zA-Z0-9 -/:-@\[-\`\{-\~]+", ErrorMessage = "半角英数字記号のみで構成された名前を入力してください")]
             [DataType(DataType.Text)]
-            [Display(Name="UserName")]
+            [Display(Name = "ユーザー名")]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "メールアドレス")]
             public string Email { get; set; }
 
             /// <summary>
@@ -109,9 +117,9 @@ namespace OFAMA.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0}は {2} 文字以上 {1} 文字以下で入力してください", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "パスワード")]
             public string Password { get; set; }
 
             /// <summary>
@@ -119,8 +127,8 @@ namespace OFAMA.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "確認用パスワード")]
+            [Compare("Password", ErrorMessage = "パスワードと確認用パスワードが一致しません")]
             public string ConfirmPassword { get; set; }
 
             //0427追加
@@ -128,9 +136,88 @@ namespace OFAMA.Areas.Identity.Pages.Account
             [DataType(DataType.Text)]
             [Display(Name = "事前パスワード")]
             public string Keyword { get; set; }
-            
+
+
 
         }
+        //1011
+        public async Task<IActionResult> RegisterRole(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // IsInRoleAsync, AddToRoleAsync, RemoveFromRoleAsync メソッド
+            // の引数が MVC5 とは異なり、id ではなく MySQLIdentityUser が
+            // 必要なのでここで取得しておく
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var model = new UserWithRoleInfo
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                UserEmail = user.Email
+            };
+
+            var roles = await _roleManager.Roles.
+                          OrderBy(role => role.Name).ToListAsync();
+
+            foreach (IdentityRole role in roles)
+            {
+                RoleInfo roleInfo = new RoleInfo();
+                roleInfo.RoleName = role.Name;
+                roleInfo.IsInThisRole = await _userManager.
+                                        IsInRoleAsync(user, role.Name);
+                model.UserRoles.Add(roleInfo);
+            }
+
+            if (ModelState.IsValid)
+            {
+                Microsoft.AspNetCore.Identity.IdentityResult result;
+
+
+                foreach (RoleInfo roleInfo in model.UserRoles)
+                {
+                    Console.WriteLine(roleInfo.RoleName);
+                    if (roleInfo.RoleName == "Keyword")
+                    {
+                        // id のユーザーが roleInfo.RoleName のロールに属して
+                        // いるか否か。以下でその情報が必要。
+                        bool isInRole = await _userManager.
+                                        IsInRoleAsync(user, roleInfo.RoleName);
+                        if (isInRole == false)
+                        {
+                            result = await _userManager.AddToRoleAsync(user, roleInfo.RoleName);
+                        }
+
+                    }
+                    if (roleInfo.RoleName == "Role_Assign")
+                    {
+                        // id のユーザーが roleInfo.RoleName のロールに属して
+                        // いるか否か。以下でその情報が必要。
+                        bool isInRole = await _userManager.
+                                        IsInRoleAsync(user, roleInfo.RoleName);
+                        if (isInRole == false)
+                        {
+                            result = await _userManager.AddToRoleAsync(user, roleInfo.RoleName);
+                        }
+
+                    }
+                }
+
+                // 編集に成功したら Role/UserWithRoles にリダイレクト
+                return RedirectToAction("UserWithRoles", "Role");
+            }
+
+            // 編集に失敗した場合、編集画面を再描画
+            return Page();
+        }
+
+
 
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -152,30 +239,40 @@ namespace OFAMA.Areas.Identity.Pages.Account
                     Email = Input.Email
                 };
 
+                //1011
+                var isUniqueEmail = await _userManager.FindByEmailAsync(user.Email) == null;
+                if (!isUniqueEmail)
+                {
+                    ModelState.AddModelError(string.Empty, "メールアドレスは既に登録済みです");
+                    return Page();
+                }
+
+                var isUniqueUserName = await _userManager.FindByEmailAsync(user.UserName) == null;
+                if (!isUniqueUserName)
+                {
+                    ModelState.AddModelError(string.Empty, "この名前は既に使用されています");
+                    return Page();
+                }
+
+
                 var _keyword = _context.Keyword.Select(m => m.Keyword).FirstOrDefault();
                 if (_keyword == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Keyword is null");
+                    ModelState.AddModelError(string.Empty, "事前パスワードが入力されていません");
                     return Page();
                 }
 
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                Console.WriteLine(Input.UserName);
                 
                 //作成したキーワードがtrueかどうかを判断するコード。okならif文の中へ
-
-
-
-                //Console.WriteLine("iti"+Input.Password);
-                //Console.WriteLine("ni"+_keyword);
                 if (_keyword.Equals(Input.Keyword))
                 {
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {
-                        _logger.LogInformation("User created a new account with password.");
+                        _logger.LogInformation("ユーザがパスワードつきの新しいアカウントを作成しました");
 
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -189,8 +286,10 @@ namespace OFAMA.Areas.Identity.Pages.Account
                         /*await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");*/
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by {callbackUrl}");
+                            $" {callbackUrl}からアカウントの認証を行ってください");
 
+                        //2024.10.05追加
+                        await RegisterRole(user.Id);
 
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {
@@ -213,9 +312,9 @@ namespace OFAMA.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    
-                    ModelState.AddModelError(string.Empty, "Keyword is wrong");
-                   
+
+                    ModelState.AddModelError(string.Empty, "事前パスワードが間違っています");
+
 
                 }
 
@@ -239,13 +338,13 @@ namespace OFAMA.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private Microsoft.AspNetCore.Identity.IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (Microsoft.AspNetCore.Identity.IUserEmailStore<IdentityUser>)_userStore;
         }
     }
 }

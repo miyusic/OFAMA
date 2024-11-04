@@ -62,8 +62,8 @@ namespace OFAMA.Areas.Identity.Pages.Account
             Email = email;
             // Once you add a real email sender, you should remove this code that lets you confirm the account
 
-            
-            DisplayConfirmAccountLink = true;
+            //1018 =true から =falseへ変更
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
