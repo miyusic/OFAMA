@@ -8,6 +8,7 @@ namespace OFAMA.Models
 
     {
         public int Id { get; set; } // 主キー
+        [Required(ErrorMessage = "機関名を入力してください。")]
         [DisplayName("機関名")]
         public string Name { get; set; } // 機関名
         [DisplayName("更新日")]

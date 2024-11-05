@@ -275,7 +275,7 @@ namespace OFAMA.Controllers
         [HttpPost, ActionName("Return")]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Borrow_Return, Admin_Dev")]
-        public async Task<IActionResult> ReturnConfirmed(int id, DateTime returnDate, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
+        public async Task<IActionResult> ReturnConfirmed(int id, DateTime? returnDate, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
         {
             if (_context.Borrow == null)
             {
@@ -292,6 +292,14 @@ namespace OFAMA.Controllers
                 }
                 return View("Return", borrow_to_return);
             }
+
+            if (returnDate == null)
+            {
+                ModelState.AddModelError("use_equipid_data", "返却日を入力してください。");
+                //エラーメッセージを吐く
+                return View(borrow);
+            }
+
 
             var borrow_at = await _context.Borrow.FindAsync(id);
             if (borrow_at != null)
