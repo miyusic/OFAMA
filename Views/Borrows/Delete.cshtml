@@ -10,7 +10,19 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 
+
 <h1 class="heading">Delete</h1>
+
+<!--エラーメッセージの表示-->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
 
 <h3>以下の内容を削除してもいいですか?</h3>
 <div>

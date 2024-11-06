@@ -163,7 +163,7 @@ namespace OFAMA.Controllers
             if (isUsedInAccounts)
             {
                 // InstitutionがAccountに使用されている場合、ModelStateにエラーメッセージを追加
-                ModelState.AddModelError(string.Empty, "この機関は会計管理で使用されているため、削除できません。");
+                ModelState.AddModelError("isUsedInAccounts", "この機関は会計管理で使用されているため、削除できません。");
                 // 対象のInstitutionを再取得してDeleteビューを表示
                 var institutionToDelete = await _context.Institution.FindAsync(id);
                 if (institutionToDelete == null)

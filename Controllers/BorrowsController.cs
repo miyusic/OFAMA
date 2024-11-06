@@ -295,7 +295,7 @@ namespace OFAMA.Controllers
 
             if (returnDate == null)
             {
-                ModelState.AddModelError("use_equipid_data", "返却日を入力してください。");
+                ModelState.AddModelError("ReturnDate", "返却日を入力してください。");
                 //エラーメッセージを吐く
                 return View(borrow);
             }
