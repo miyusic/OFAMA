@@ -52,3 +52,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+var tableElem = document.getElementById('Table');
+var rows = tableElem.getElementsByTagName('tr');
+var showAllBtn = document.getElementById('show-all-btn');
+
+console.log(showAllBtn); // テーブルの行数を表示
+
+for (var i = 6; i < rows.length; i++) {
+    rows[i].style.display = "none";
+}
+
+// ボタン押下時にすべて表示
+showAllBtn.addEventListener("click", function () {
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = "";
+    }
+    showAllBtn.style.display = "none"; // ボタンを非表示にする
+});
+

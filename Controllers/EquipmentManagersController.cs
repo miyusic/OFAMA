@@ -30,7 +30,7 @@ namespace OFAMA.Controllers
 
         // GET: EquipmentManagers
         //[Authorize(Roles = "EquipMng_View, Admin_Dev")]
-        public async Task<IActionResult> Index(string searchNameString,string searchEquipString, DateTime? startDate,DateTime? endDate)
+        public async Task<IActionResult> Index(string? searchNameString,string? searchEquipString, DateTime? startDate,DateTime? endDate)
         {
             //データのリスト
             var equipMngs = _context.EquipmentManager.Select(m => m);
@@ -105,12 +105,20 @@ namespace OFAMA.Controllers
             }
 
             //日付での絞り込み
+            if (startDate != null && endDate != null)
+            {
+                if (endDate < startDate)
+                {
+                    ModelState.AddModelError("startDate", "開始日が終了日よりも後の日付です");
+                }
+            }
+
             if (startDate != null)
             {
                 equipMngs = equipMngs.Where(m => m.Created_at >= startDate);
             }
 
-            if(endDate != null)
+            if (endDate != null)
             {
                 equipMngs = equipMngs.Where(m => m.Created_at <= endDate);
             }

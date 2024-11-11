@@ -17,7 +17,7 @@ namespace OFAMA.Models
         [DisplayName("ユーザ名")]
         public String UserId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "数量は1以上である必要があります")]
+        [Range(1, 10000, ErrorMessage = "数量は1～10000である必要があります")]
         [Required(ErrorMessage = "数量は必須項目です")]
         [DisplayName("数量")]
         public int Amount { get; set; }

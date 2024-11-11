@@ -12,13 +12,24 @@
 </head>
 <h3 class="heading">備品管理</h3>
 
+<!--エラーメッセージの表示-->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
 <div class="buttons-container">
     <div>
         <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
         <div class="mb-3"></div>
         <form asp-controller="EquipmentManagers" asp-action="Index" method="get">
 
-            <input type="submit" value="全データ表示" class="btn btn-outline-primary btn-lg" />
+            <input type="submit" value="リセット" class="btn btn-outline-primary btn-lg" />
 
         </form>
     </div>
@@ -39,7 +50,7 @@
                     <div>備品名</div>
                     <div><input type="text" asp-for="SearchEquipString" /></div>
 
-                    <div>期間を指定</div>
+                    <div>作成日時の絞り込み</div>
                     <div> </div>
                     <div><開始日></div>
                    
@@ -58,7 +69,8 @@
     <script src="~/js/accordionpanel.js"></script>
 </form>
 
-<table class="table table-hover">
+<div class="table-responsive">
+    <table class="table table-hover" id="Table">
     <thead>
         <tr>
             <th>
@@ -115,3 +127,5 @@
 }
     </tbody>
 </table>
+    <button id="show-all-btn" class="btn btn-primary">すべて表示</button>
+</div>

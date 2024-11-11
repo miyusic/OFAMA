@@ -52,3 +52,17 @@ body {
 .form-group {
     margin-bottom: 1rem; /* 必要に応じて調整 */
 }
+
+.accordionbox .button-container .btn {
+    width: auto;
+    padding: 5px 10px;
+    margin: 0 5px; /* ボタン間の余白を設定 */
+}
+
+/* 横スクロールバーを常に表示するための追加スタイル */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* iOSのスムーズスクロールを有効にする */
+    touch-action: pan-x; /* 横方向のパン操作を有効にする */
+    white-space: nowrap; /* テーブルの内容が折り返されずに横スクロールされるようにする */
+}
