@@ -168,17 +168,37 @@ namespace OFAMA.Controllers
             {
                 try
                 {
-                    //名前が一致するItemのレコードを取得
-                    var equipname = await _context.Equipment
+                    //名前と消耗品のフラグが一致するItemのレコードを取得
+                    var equipdata = await _context.Equipment
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(m => m.ItemName == equipment.ItemName && m.isExpandable == equipment.isExpandable);
+
+                    if (equipdata == null)
+                    {
+                        //名前が同じモノがあるかを取得
+                        var equipname = await _context.Equipment
+                            .AsNoTracking()
                         .FirstOrDefaultAsync(m => m.ItemName == equipment.ItemName);
 
-                    if (equipname == null)
-                    {
-                        //異なる名前なのでOK
-                        var update_date = DateTime.Now;
-                        equipment.Updated_at = update_date;
-                        _context.Update(equipment);
-                        await _context.SaveChangesAsync();
+                        //現在のIDのデータを取得
+                        var equipcurrentid = await _context.Equipment
+                            .AsNoTracking()
+                        .FirstOrDefaultAsync(m => m.Id == equipment.Id);
+
+                        //名前が異なる or //名前は同じだけど消耗品のフラグが違う
+                        if ((equipname == null) || ((equipcurrentid.ItemName == equipment.ItemName) && (equipcurrentid.isExpandable != equipment.isExpandable)))
+                        {
+                            //異なる名前or消耗品のフラグなのでOK
+                            var update_date = DateTime.Now;
+                            equipment.Updated_at = update_date;
+                            _context.Update(equipment);
+                            await _context.SaveChangesAsync();
+                        }
+                        else//同じ名前のデータは登録できない
+                        {
+                            ModelState.AddModelError("ItemName", "この備品は既に存在しています");
+                            return View(equipment);
+                        }
                     }
                     else//同じ名前のデータは登録できない
                     {
