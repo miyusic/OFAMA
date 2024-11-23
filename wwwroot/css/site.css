@@ -66,3 +66,8 @@ body {
     touch-action: pan-x; /* 横方向のパン操作を有効にする */
     white-space: nowrap; /* テーブルの内容が折り返されずに横スクロールされるようにする */
 }
+
+
+.text-center {
+    text-align: center;
+}

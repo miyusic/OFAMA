@@ -6,6 +6,7 @@ namespace OFAMA.Models
     {
         [Key]
         public string Id { get; set; }
+        [Display(Name = "ユーザー名")]
         public string UserName { get; set; }
         /*
         [EmailAddress]
@@ -21,8 +22,9 @@ namespace OFAMA.Models
             UserRoles = new List<RoleInfo>();
         
         }
+        [Display(Name = "ロール")]
         public IList<RoleInfo> UserRoles { set; get; }
-
+        [Display(Name = "ロール数")]
         public int UserRoleSum { set; get; }
 
 

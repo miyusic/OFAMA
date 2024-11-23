@@ -24,12 +24,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model =>model.UserRoleSum)
             </th>
-            <th>
+            <th class="text-center">
                 <text>
-                    Graduate
+                    ステータス
                 </text>
             </th>
             <th></th>
@@ -44,14 +44,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.UserRoleSum)
                 </td>
-                <td>
-                    @if(item.UserRoleSum == 0)
+                <td class="text-center">
+                    @if(item.UserRoleSum != 0)
                     {
                         <text>
-                            graduate
+                            在籍
                         </text>
                     }
                 </td>
@@ -69,5 +69,4 @@
     
 </table>
         <button id="show-all-btn" class="btn btn-primary">すべて表示</button>
-</div>
 </div>

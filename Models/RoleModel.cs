@@ -30,6 +30,7 @@ namespace OFAMA.Models
         public string UserName { set; get; }
         public string UserEmail { set; get; }
 
+        [Display(Name = "ロール名")]
         public IList<RoleInfo> UserRoles { set; get; }
     }
 
