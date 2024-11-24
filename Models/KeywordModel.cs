@@ -8,6 +8,11 @@ namespace OFAMA.Models
 
         [Required]
         [Display(Name ="キーワード")]
+        [RegularExpression(@"[a-zA-Z0-9 -/:-@\[-\`\{-\~]+", ErrorMessage = "半角英数字記号のみで構成された名前を入力してください")]
+        [StringLength(
+          100,
+          ErrorMessage = "{0} は {2} 文字以上",
+          MinimumLength = 3)]
         public string? Keyword { get; set; }
 
         [Display(Name = "最終更新日時")]

@@ -16,7 +16,7 @@
 
 <div class="buttons-container">
     <div>
-        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+        <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
     </div>
     <div>
         <a asp-action="UserWithRoles" class="btn btn-primary btn-lg">ロール付与</a>
@@ -40,8 +40,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td class="text-end">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
             </td>
         </tr>
 }

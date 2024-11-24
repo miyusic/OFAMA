@@ -59,9 +59,9 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
             /*追記*/
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name="Full name")]
+            [Display(Name = "ユーザー名")]
             public string UserName { get; set; }
-
+            /*
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Status")]
@@ -69,10 +69,11 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Authority")]
+            */
             //
             public string Authority { get; set; }
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "電話番号")]
 
             public string PhoneNumber { get; set; }
         }
@@ -127,13 +128,13 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "電話番号登録の際予期せぬエラーが発生しました。";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "プロフィールが更新されました。";
             return RedirectToPage();
         }
     }

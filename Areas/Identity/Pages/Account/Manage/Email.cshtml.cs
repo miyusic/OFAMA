@@ -71,7 +71,7 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "新しいメールアドレス")]
             public string NewEmail { get; set; }
         }
 
@@ -137,7 +137,7 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "メールアドレスが変更されました。";
             return RedirectToPage();
         }
 
@@ -168,10 +168,10 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
                 email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");*/
-            await _emailSender.SendEmailAsync(email, "Confirm your email",
-                           $"Please confirm your account by {callbackUrl}");
+            await _emailSender.SendEmailAsync(email, "確認用メール",
+                           $" {callbackUrl}を押してアカウントの確認を行ってください。");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "メールが送信されました。 メールボックスを確認してください。";
             return RedirectToPage();
         }
     }

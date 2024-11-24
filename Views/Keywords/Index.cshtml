@@ -14,7 +14,7 @@
 <h3 class="heading">キーワード管理</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
 </p>
 
 <div class="table-responsive">
@@ -40,8 +40,8 @@
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
             </td>
         </tr>
 }

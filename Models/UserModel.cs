@@ -18,7 +18,7 @@ namespace OFAMA.Models
     }
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "{0}は必須です。")]
+        [Required(ErrorMessage = "{0}は必須項目です")]
         [EmailAddress]
         [Display(Name = "ユーザー名")]
         [Key]
@@ -29,7 +29,7 @@ namespace OFAMA.Models
  
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "{0}は必須です。")]
+        [Required(ErrorMessage = "{0}は必須項目です")]
         [StringLength(100, ErrorMessage =
             "{0}は{2}から{1}文字の範囲で設定してください。",
             MinimumLength = 6)]
@@ -56,7 +56,7 @@ namespace OFAMA.Models
 
     public class EditViewModel
     {
-        [Required(ErrorMessage = "{0}は必須です。")]
+        [Required(ErrorMessage = "{0}は必須項目です")]
         [Display(Name = "ユーザー名")]
         [Key]
         public string UserName { get; set; }
@@ -66,6 +66,7 @@ namespace OFAMA.Models
         
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "{0}は必須項目です")]
         [StringLength(100, ErrorMessage =
             "{0}は{2}から{1}文字の範囲で設定してください。",
             MinimumLength = 6)]
@@ -73,6 +74,7 @@ namespace OFAMA.Models
         [Display(Name = "パスワード")]
         public string? Password { get; set; }
 
+        [Required(ErrorMessage = "{0}は必須項目です")]
         [DataType(DataType.Password)]
         [Display(Name = "パスワード確認")]
         [Compare("Password", ErrorMessage = "確認パスワードが一致しません。")]

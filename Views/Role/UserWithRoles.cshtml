@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
-<h1 class="heading">ロール付与</h1>
+<h1 class="heading">ユーザ別ロール一覧</h1>
 
 <div class="table-responsive">
 <table class="table table-hover">
@@ -64,7 +64,7 @@
                     </div>
                 </td>
                 <td>
-                    <a asp-action="EditRoleAssignment" asp-route-id="@item.UserId" class="btn btn-info btn-sm">Edit</a>
+                    <a asp-action="EditRoleAssignment" asp-route-id="@item.UserId" class="btn btn-info btn-sm">ロール付与</a>
                 </td>
             </tr>
         }

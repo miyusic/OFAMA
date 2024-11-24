@@ -183,8 +183,9 @@ namespace OFAMA.Controllers
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "User_PasswordChange")]
         //[Authorize(Roles = "Password_Reset, Admin_Dev")]
-        public async Task<IActionResult> Edit(string id,
-            [Bind("UserName,Email,Password,ConfirmPassword,Status,Authority")] EditViewModel model)
+        public async Task<IActionResult> Edit(
+            string id,
+            string Password)
         {
             if (id == null)
             {
@@ -198,14 +199,14 @@ namespace OFAMA.Controllers
                 {
                     return NotFound();
                 }
-                target.UserName = model.UserName;
+                //target.UserName = model.UserName;
                 //target.Email = model.Email;
-                
-                
+
+
 
 
                 // 新パスワードを入力した場合はパスワードも更新する
-                if (!string.IsNullOrEmpty(model.Password))
+                if (!string.IsNullOrEmpty(Password))
                 {
                     // MVC5 と違って PasswordValidator プロパティはない
                     // PasswordValidators で IList<IPasswordValidator<TUser>>
@@ -213,14 +214,14 @@ namespace OFAMA.Controllers
                     // （ホントにそれで良いのかどうかは分からないが）
                     // ValidateAsync メソッドの引数は MVC5 と違うので注意
                     var resultPassword = await _userManager.PasswordValidators[0].
-                        ValidateAsync(_userManager, target, model.Password);
+                        ValidateAsync(_userManager, target, Password);
 
                     if (resultPassword.Succeeded)
                     {
                         // 検証 OK の場合、入力パスワードをハッシュ。
                         // HashPassword メソッドの引数は MVC5 とは異なる
                         var hashedPassword = _userManager.PasswordHasher.
-                            HashPassword(target, model.Password);
+                            HashPassword(target, Password);
                         target.PasswordHash = hashedPassword;
                     }
                     else
@@ -232,7 +233,7 @@ namespace OFAMA.Controllers
                         {
                             ModelState.AddModelError(string.Empty, error.Description);
                         }
-                        return View(model);
+                        return View();
                     }
                 }
 
@@ -250,8 +251,20 @@ namespace OFAMA.Controllers
                 }
             }
 
-            // 更新に失敗した場合、編集画面を再描画
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState.Values)
+                {
+                    foreach (var errorMessage in error.Errors)
+                    {
+                        Console.WriteLine(errorMessage.ErrorMessage);
+                    }
+                }
+            }
+
+
+                // 更新に失敗した場合、編集画面を再描画
+                return View();
         }
 
         // GET: User/Delete/5

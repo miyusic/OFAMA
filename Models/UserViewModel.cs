@@ -22,9 +22,9 @@ namespace OFAMA.Models
             UserRoles = new List<RoleInfo>();
         
         }
-        [Display(Name = "ロール")]
+        [Display(Name = "付与ロール")]
         public IList<RoleInfo> UserRoles { set; get; }
-        [Display(Name = "ロール数")]
+        [Display(Name = "ロール付与数")]
         public int UserRoleSum { set; get; }
 
 

@@ -11,6 +11,7 @@ namespace OFAMA.Models
           100,
           ErrorMessage = "{0} は {2} 文字以上",
           MinimumLength = 3)]
+        [RegularExpression(@"[a-zA-Z]+", ErrorMessage = "半角英字のみで構成された名前を入力してください")]
         [Display(Name = "ロール名")]
         public string Name { get; set; }
     }
@@ -30,14 +31,16 @@ namespace OFAMA.Models
         public string UserName { set; get; }
         public string UserEmail { set; get; }
 
-        [Display(Name = "ロール名")]
+        [Display(Name = "付与ロール")]
         public IList<RoleInfo> UserRoles { set; get; }
     }
 
     public class RoleInfo
     {
         [Key]
+        [Display(Name = "ロール名")]
         public string RoleName { set; get; }
+        [Display(Name = "ロール付与")]
         public bool IsInThisRole { set; get; }
     }
 }

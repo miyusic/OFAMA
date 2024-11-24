@@ -14,6 +14,18 @@
 </head>
 <h3 class="heading"> パスワード再設定</h3>
 
+<!--エラーメッセージの表示-->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,20 +36,16 @@
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password"></span>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <p>
-                <div class="form-group">
-                    <label asp-for="ConfirmPassword" class="control-label"></label>
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword"></span>
-                </div>
-            </p>
             <div class="form-group">
-                <p>
-                    <input type="submit" value="Save" class="btn btn-primary me-3" />
-                    <a asp-action="Index" class="btn btn-secondary"> Back </a>
-                </p>
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="保存" class="btn btn-primary me-3" />
+                <a asp-action="Index" class="btn btn-secondary"> 戻る </a>
             </div>
 
         </form>

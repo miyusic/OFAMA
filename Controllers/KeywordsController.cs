@@ -76,7 +76,7 @@ namespace OFAMA.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Keyword is already exist");
+                ModelState.AddModelError(string.Empty, "キーワードは既に存在しています");
                 //throw new InvalidOperationException($"Keyword is already exist ");
             }
             return View(_keyword);
