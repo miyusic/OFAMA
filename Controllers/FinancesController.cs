@@ -25,7 +25,13 @@ namespace OFAMA.Controllers
 
         // GET: Finances
         //[Authorize(Roles = "Finance_View, Admin_Dev")]
-        public async Task<IActionResult> Index(string financeReceived, string financeInstitution, string searchString, string searchNameString)
+        public async Task<IActionResult> Index(
+            string financeReceived, 
+            string financeInstitution, 
+            string searchString, 
+            string searchNameString, 
+            DateTime? startDate, 
+            DateTime? endDate)
         {
             var instituteQuery = _context.Institution
             .OrderBy(i => i.Name)
@@ -110,6 +116,17 @@ namespace OFAMA.Controllers
                 if (!string.IsNullOrEmpty(financeReceived))
             {
                 finances = finances.Where(x => x.Received == financeReceived);
+            }
+
+            // 日付フィルタリング
+            if (startDate.HasValue)
+            {
+                finances = finances.Where(f => f.Created_at >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                finances = finances.Where(f => f.Created_at <= endDate.Value);
             }
 
             // フィルタ済みの財務データをリスト化

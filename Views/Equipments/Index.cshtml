@@ -32,10 +32,14 @@
             <section>
                 <h3 class="accordiontitle">絞り込み検索</h3>
                 <div class="accordionbox">
-                    <div>備品名検索</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Equipments[0].ItemName)
+                    </div>
 
                     <div><input type="text" asp-for="SearchString" /></div>
-                    <div>消耗品/非消耗品</div>
+                    <div>
+                        @Html.DisplayFor(model => model.Equipments[0].isExpandable)
+                    </div>
                     <div><select asp-for="SearchExpandableString" asp-items="Model.Expandables"> <option value="">全て</option> </select></div>
 
                     <div><input type="submit" value="検索" class="btn btn-primary" /></div>

@@ -44,19 +44,27 @@
             <section>
                 <h3 class="accordiontitle">絞り込み検索</h3>
                 <div class="accordionbox">
-                    <div>ユーザ名</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.EquipmentManagers[0].UserId)
+                    </div>
                     <div><input type="text" asp-for="SearchNameString" /></div>
 
-                    <div>備品名</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.EquipmentManagers[0].EquipId)
+                    </div>
                     <div><input type="text" asp-for="SearchEquipString" /></div>
 
-                    <div>作成日時の絞り込み</div>
-                    <div> </div>
-                    <div><開始日></div>
-                   
-                    <div> <input　type ="date" asp-for="StartDate" class="form-control" /></div>
-                    <div><終了日></div>
-                    <div> <input　type ="date" asp-for="EndDate" class="form-control" /></div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.EquipmentManagers[0].Created_at)
+                    </div>
+                    <div>
+                        <input type="date" asp-for="StartDate" />
+                        ～
+                        <input type="date" asp-for="EndDate" />
+                        <!--<input　type ="date" asp-for="StartDate" class="form-control" />
+                        ～
+                        <input　type ="date" asp-for="EndDate" class="form-control" />-->
+                    </div>
                     <div><input type="submit" value="検索" class="btn btn-primary" /></div>
 
                 </div>
@@ -74,10 +82,10 @@
     <thead>
         <tr>
             <th>
-                ユーザ名
+                @Html.DisplayNameFor(model => model.EquipmentManagers[0].UserId)
             </th>
             <th>
-                備品名
+                @Html.DisplayNameFor(model => model.EquipmentManagers[0].EquipId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EquipmentManagers[0].Amount)

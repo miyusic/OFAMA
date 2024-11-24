@@ -21,8 +21,8 @@ namespace OFAMA.Models
         [DisplayName("消耗品")]
         public Boolean isExpandable { get; set; }
 
-        [Required(ErrorMessage = "作成日時は必須項目です")]
-        [DisplayName("作成日時")]
+        [Required(ErrorMessage = "登録日は必須項目です")]
+        [DisplayName("登録日")]
         [DataType(DataType.Date)]
         public DateTime Created_at { get; set; }
 

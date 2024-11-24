@@ -18,14 +18,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <!--label asp-for="EquipId" class="control-label"></label-->
-                備品名
+                <label asp-for="EquipId" class="control-label"></label>
                 <select asp-for="EquipId" asp-items="@(ViewBag.Eqips)" class="form-control"></select>
                 <span asp-validation-for="EquipId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <!--label asp-for="UserId" class="control-label"></label-->
-                ユーザ名
+                <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" asp-items="@(ViewBag.Users)" class="form-control"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>

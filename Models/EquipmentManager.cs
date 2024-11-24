@@ -13,17 +13,17 @@ namespace OFAMA.Models
         [DisplayName("備品名")]
         public int EquipId { get; set; }
 
-        [Required(ErrorMessage = "ユーザ名は必須項目です")]
-        [DisplayName("ユーザ名")]
+        [Required(ErrorMessage = "担当者名は必須項目です")]
+        [DisplayName("担当者名")]
         public String UserId { get; set; }
 
-        [Range(1, 10000, ErrorMessage = "数量は1～10000である必要があります")]
+        [Range(1, 10000, ErrorMessage = "数量は1以上10,000以下である必要があります")]
         [Required(ErrorMessage = "数量は必須項目です")]
         [DisplayName("数量")]
         public int Amount { get; set; }
 
-        [Required(ErrorMessage = "作成日時は必須項目です")]
-        [DisplayName("作成日時")]
+        [Required(ErrorMessage = "実施日は必須項目です")]
+        [DisplayName("実施日")]
         [DataType(DataType.Date)]
         public DateTime Created_at { get; set; }
 

@@ -28,7 +28,12 @@ namespace OFAMA.Controllers
 
         // GET: Borrows
         //[Authorize(Roles = "Borrow_View, Admin_Dev")]
-        public async Task<IActionResult> Index(string borrowStatus, string searchString, string searchNameString)
+        public async Task<IActionResult> Index(
+            string borrowStatus,
+            string searchString,
+            string searchNameString,
+            DateTime? borrowDate,
+            DateTime? returnDate)
         {
             // Borrowテーブルから全てのジャンルを取得するLINQクエリ
             var statusQuery = _context.Borrow
@@ -38,18 +43,18 @@ namespace OFAMA.Controllers
             // Borrowテーブルから全てのデータを取得するLINQクエリ
             var borrows = _context.Borrow.Select(m => m);
 
-            //ユーザ名の辞書を作成
+            // ユーザ名の辞書を作成
             var userDictionary = _userManager.Users.ToDictionary(e => e.Id);
             // ViewBagに辞書を設定
             ViewBag.UserDictionary = userDictionary;
 
-            //名前検索
+            // 名前検索
             if (!string.IsNullOrEmpty(searchNameString))
             {
                 borrows = borrows
                     .Join(
                         _userManager.Users,
-                        bollow => bollow.UserId,
+                        borrow => borrow.UserId,
                         user => user.Id,
                         (borrow, user) => new
                         {
@@ -61,22 +66,34 @@ namespace OFAMA.Controllers
                     .Select(joinResult => joinResult.Borrow);
             }
 
-            // タイトル検索処理
+            // タイトル検索
             if (!string.IsNullOrEmpty(searchString))
             {
                 // タイトルに検索文字列が含まれるデータを抽出するLINQクエリ
                 borrows = borrows.Where(s => s.Usage!.Contains(searchString));
             }
 
-            // ジャンル検索処理
+            // ジャンル検索
             if (!string.IsNullOrEmpty(borrowStatus))
             {
                 // 選択したジャンルがと一致するデータを抽出するLINQクエリ
                 borrows = borrows.Where(x => x.Status == borrowStatus);
             }
 
-            
-            // ジャンルと抽出した映画データをそれぞれリストにしてプロパティに格納する
+
+            // BorrowDate 指定検索
+            if (borrowDate.HasValue)
+            {
+                borrows = borrows.Where(b => b.BorrowDate == borrowDate.Value.Date);
+            }
+
+            // ReturnDate 指定検索
+            if (returnDate.HasValue)
+            {
+                borrows = borrows.Where(b => b.ReturnDate == returnDate.Value.Date);
+            }
+
+            // 結果をViewModelに格納
             var borrowStatusVM = new BorrowViewModel
             {
                 Statuses = new SelectList(await statusQuery.Distinct().ToListAsync()),
@@ -87,12 +104,6 @@ namespace OFAMA.Controllers
             return borrowStatusVM != null ?
                     View(borrowStatusVM) :
                     Problem("Entity set 'ApplicationDbContext.Borrow'  is null.");
-
-            /*
-            return borrows != null ?
-                    View(borrows) :
-                    Problem("Entity set 'ApplicationDbContext.Borrow'  is null.");
-            */
         }
 
         // GET: Borrows/Create

@@ -8,23 +8,25 @@ namespace OFAMA.Models
         public int Id { get; set; } // ID（データベースで自動生成されるため、自動増分するID）
         [DisplayName("返却状況")]
         public string Status { get; set; }
-        [Required(ErrorMessage = "担当者を入力してください。")]
-        [DisplayName("担当者")]
+        [Required(ErrorMessage = "担当者名は必須項目です")]
+        [DisplayName("担当者名")]
         public string UserId { get; set; } // ユーザID
-        [Required(ErrorMessage = "金額を入力してください。")]
+        [Range(0, 1000000, ErrorMessage = "金額は0円以上1,000,000円以下である必要があります。")]
+        [Required(ErrorMessage = "金額は必須項目です")]
         [DisplayName("金額")]
         public int BorrowMoney { get; set; } // 金額
-        [Required(ErrorMessage = "用途を入力してください。")]
+        [Required(ErrorMessage = "用途は必須項目です")]
         [DisplayName("用途")]
         public string Usage { get; set; } // 用途
-        [Required(ErrorMessage = "立て替え日時を入力してください。")]
-        [DisplayName("立て替え日時")]
+        [StringLength(20, ErrorMessage = "用途は20文字以内である必要があります")]
+        [Required(ErrorMessage = "立て替え日は必須項目です")]
+        [DisplayName("立て替え日")]
         [DataType(DataType.Date)]
         public DateTime BorrowDate { get; set; }
-        [DisplayName("返却日時")]
+        [DisplayName("返却日")]
         [DataType(DataType.Date)]
         public DateTime? ReturnDate { get; set; } // 返却日時（nullの場合も考慮）
-        [DisplayName("更新日")]
+        [DisplayName("最終更新日時")]
         public DateTime Updated_at { get; set; }
     }
 }

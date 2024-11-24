@@ -45,19 +45,35 @@
             <section>
                 <h3 class="accordiontitle">絞り込み検索</h3>
                 <div class="accordionbox">
-                    <div>返却状態検索</div>
+                    <div>返却状態</div>
                     <div>
                         <select asp-for="BorrowStatus" asp-items="Model.Statuses">
                             <option value="">全て</option>
                         </select>
                     </div>
-                    <div>ユーザ名</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Borrows[0].UserId)
+                        </div>
                     <div><input type="text" asp-for="SearchNameString" /></div>
-                    <div>用途</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Borrows[0].Usage)
+                    </div>
                     <div><input type="text" asp-for="SearchString" /></div>
 
-                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Borrows[0].BorrowDate)
+                    </div>
+                    <div>
+                        <input type="date" asp-for="BorrowDate" />
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Borrows[0].ReturnDate)
+                    </div>
+                    <div>
+                        <input type="date" asp-for="ReturnDate" />
+                    </div>
 
+                    <div><input type="submit" value="検索" class="btn btn-primary" /></div>
                     <!--
                     <div>期間を指定</div>
                     <div> </div>

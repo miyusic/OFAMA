@@ -63,25 +63,43 @@
             <section>
                 <h3 class="accordiontitle">絞り込み検索</h3>
                 <div class="accordionbox">
-                    <div>入出金検索</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Finances[0].Received)
+                    </div>
                     <div>
                         <select asp-for="FinanceReceived" asp-items="Model.Receiveds">
                             <option value="">全て</option>
                         </select>
                     </div>
 
-                    <div>機関名</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Finances[0].InstiId)
+                    </div>
                     <div>
                         <select asp-for="FinanceInstitution" asp-items="Model.Institutions">
                             <option value="">全て</option>
                         </select>
                     </div>
 
-                    <div>ユーザ名</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Finances[0].UserId)
+                    </div>
                     <div><input type="text" asp-for="SearchNameString" /></div>
 
-                    <div>用途</div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Finances[0].Way)
+                    </div>
                     <div><input type="text" asp-for="SearchString" /></div>
+
+                    <div>
+                        @Html.DisplayNameFor(model => model.Finances[0].Created_at)
+                    </div>
+                    <div>
+                        <input type="date" asp-for="StartDate" />
+                        ～
+                        <input type="date" asp-for="EndDate" />
+                    </div>
+
                     <div><input type="submit" value="検索" class="btn btn-primary" /></div>
                 </div>
             </section>

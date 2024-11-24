@@ -485,7 +485,7 @@ namespace OFAMA.Controllers
                 {
                     if (equipmentManager.UserId == equipmernagemove.UserId1)
                     {
-                        ModelState.AddModelError("UserId1", "元データと同じユーザ名が指定されています");
+                        ModelState.AddModelError("UserId1", "元データと同じ担当者名が指定されています");
                         return View(equipmernagemove);
                     }
 
@@ -499,13 +499,13 @@ namespace OFAMA.Controllers
                     {
                         if (equipmentManager.UserId == equipmernagemove.UserId2)
                         {
-                            ModelState.AddModelError("UserId2", "元データと同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId2", "元データと同じ担当者名が指定されています");
                             return View(equipmernagemove);
                         }
                             if (equipmernagemove.UserId1== equipmernagemove.UserId2)
                         {
-                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
-                            ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId1", "同じ担当者名が指定されています");
+                            ModelState.AddModelError("UserId2", "同じ担当者名が指定されています");
 
                             // 3つ目のデータも被りがあれば、エラーメッセージを出す
                             if (!string.IsNullOrEmpty(equipmernagemove.UserId3) && equipmernagemove.Amount3 > 0)
@@ -513,7 +513,7 @@ namespace OFAMA.Controllers
                                 if ((equipmernagemove.UserId1 == equipmernagemove.UserId3)
                                     && (equipmernagemove.UserId2 == equipmernagemove.UserId3))
                                 {
-                                    ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                    ModelState.AddModelError("UserId3", "同じ担当者名が指定されています");
                                 }
                             }
                             return View(equipmernagemove);
@@ -526,17 +526,17 @@ namespace OFAMA.Controllers
                     {
                         if (equipmentManager.UserId == equipmernagemove.UserId3)
                         {
-                            ModelState.AddModelError("UserId3", "元データと同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId3", "元データと同じ担当者名が指定されています");
                             return View(equipmernagemove);
                         }
 
                         if (equipmernagemove.UserId1 == equipmernagemove.UserId3)
                         {
-                            ModelState.AddModelError("UserId1", "同じユーザ名が指定されています");
-                            ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                            ModelState.AddModelError("UserId1", "同じ担当者名が指定されています");
+                            ModelState.AddModelError("UserId3", "同じ担当者名が指定されています");
                             if (equipmernagemove.UserId2 == equipmernagemove.UserId3)
                             {
-                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
+                                ModelState.AddModelError("UserId2", "同じ担当者名が指定されています");
                             }
                             return View(equipmernagemove);
                         }
@@ -544,8 +544,8 @@ namespace OFAMA.Controllers
                         {
                             if (equipmernagemove.UserId2 == equipmernagemove.UserId3)
                             {
-                                ModelState.AddModelError("UserId2", "同じユーザ名が指定されています");
-                                ModelState.AddModelError("UserId3", "同じユーザ名が指定されています");
+                                ModelState.AddModelError("UserId2", "同じ担当者名が指定されています");
+                                ModelState.AddModelError("UserId3", "同じ担当者名が指定されています");
                                 return View(equipmernagemove);
                             }
                         }
