@@ -117,6 +117,14 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
+                //追加1130
+                var isUniqueEmail = await _userManager.FindByEmailAsync(Input.NewEmail) == null;
+                if (!isUniqueEmail)
+                {
+                    ModelState.AddModelError(string.Empty, "メールアドレスは既に別のユーザによって登録済みです");
+                    return Page();
+                }
+                //
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
                 var userName = await _userManager.GetUserNameAsync(user);
@@ -130,10 +138,10 @@ namespace OFAMA.Areas.Identity.Pages.Account.Manage
                     Input.NewEmail,
                     "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");*/
-                await _emailSender.SendEmailAsync(Input.NewEmail, "Confirm your email",
-                           $"Please confirm your account by {callbackUrl}");
+                await _emailSender.SendEmailAsync(Input.NewEmail, "メールアドレス確認",
+                           $"{callbackUrl} からメールアドレスの変更を確定してください");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "メールアドレス変更用の確認リンクを送信しました。メールをご確認ください。";
                 return RedirectToPage();
             }
 

@@ -240,17 +240,17 @@ namespace OFAMA.Areas.Identity.Pages.Account
                 };
 
                 //1011
-                var isUniqueEmail = await _userManager.FindByEmailAsync(user.Email) == null;
-                if (!isUniqueEmail)
-                {
-                    ModelState.AddModelError(string.Empty, "メールアドレスは既に登録済みです");
-                    return Page();
-                }
-
                 var isUniqueUserName = await _userManager.FindByEmailAsync(user.UserName) == null;
                 if (!isUniqueUserName)
                 {
                     ModelState.AddModelError(string.Empty, "この名前は既に使用されています");
+                    return Page();
+                }
+
+                var isUniqueEmail = await _userManager.FindByEmailAsync(user.Email) == null;
+                if (!isUniqueEmail)
+                {
+                    ModelState.AddModelError(string.Empty, "メールアドレスは既に登録済みです");
                     return Page();
                 }
 
