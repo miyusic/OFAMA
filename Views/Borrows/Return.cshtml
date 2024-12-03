@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 
-<h3>立て替え管理</h3>
+<h3>立替金額の返却</h3>
 <div>
     <h6>返却済にしますか?</h6>
     <hr />
@@ -31,7 +31,7 @@
             @Html.DisplayNameFor(model => model.BorrowMoney)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BorrowMoney)
+            @Html.DisplayFor(model => model.BorrowMoney)円
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Usage)
@@ -75,8 +75,8 @@
                 <input type="hidden" asp-for="BorrowDate" />
                 <input type="hidden" asp-for="ReturnDate" />
                 <div class="form-group">
-                    <input type="submit" value="Return" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-secondary">Back</a>
+                    <input type="submit" value="返却" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary">戻る</a>
                 </div>
             </form>
         </div>

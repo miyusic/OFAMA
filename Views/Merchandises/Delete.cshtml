@@ -4,7 +4,7 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1 class="heading">Delete</h1>
+<h1 class="heading">商品データ削除</h1>
 
 <!--エラーメッセージの表示-->
 @if (!ViewData.ModelState.IsValid)
@@ -31,7 +31,7 @@
             @Html.DisplayNameFor(model => model.Price)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Price)円
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Kind)
@@ -49,7 +49,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger me-3" />
-        <a asp-action="Index" class="btn btn-secondary">Back</a>
+        <input type="submit" value="削除" class="btn btn-danger me-3" />
+        <a asp-action="Index" class="btn btn-secondary">戻る</a>
     </form>
 </div>

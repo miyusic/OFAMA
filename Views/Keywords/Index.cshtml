@@ -11,20 +11,20 @@
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
 
-<h3 class="heading">キーワード管理</h3>
+<h3 class="heading">キーワード管理画面</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
 </p>
 
 <div class="table-responsive">
 <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Keyword)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Updated_at)
             </th>
             <th></th>
@@ -36,7 +36,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Keyword)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>

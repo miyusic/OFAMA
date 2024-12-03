@@ -11,16 +11,16 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
-<h3 class="heading">備品名登録</h3>
+<h3 class="heading">備品データ一覧</h3>
 
 <p>
    
 
-        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+        <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
        
         <form asp-controller="Equipments" asp-action="Index" method="get">
           
-            <input type="submit" value="リセット" class="btn btn-outline-primary btn-lg" />
+            <input type="submit" value="検索条件のリセット" class="btn btn-outline-primary btn-lg" />
         </form>
 
    
@@ -60,17 +60,17 @@
 <div class="table-responsive">
     <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipments[0].ItemName)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipments[0].isExpandable)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipments[0].Created_at)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipments[0].Updated_at)
             </th>
             <th></th>
@@ -85,15 +85,15 @@
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.isExpandable)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Created_at)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
             </td>
         </tr>
 }

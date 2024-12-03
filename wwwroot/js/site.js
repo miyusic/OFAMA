@@ -65,6 +65,7 @@ for (var i = 6; i < rows.length; i++) {
 
 // ボタン押下時にすべて表示
 showAllBtn.addEventListener("click", function () {
+    event.preventDefault();
     for (var i = 0; i < rows.length; i++) {
         rows[i].style.display = "";
     }

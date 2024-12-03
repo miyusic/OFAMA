@@ -19,7 +19,7 @@ namespace OFAMA.Models
         //金額
         [Range(0, 1000000, ErrorMessage = "金額は0円以上1,000,000円以下である必要があります。")]
         [Required(ErrorMessage = "金額は必須項目です")]
-        [DisplayName("金額")]
+        [DisplayName("金額(円)")]
         public int Price { get; set; }
 
         //種別のプルダウンメニュー用(CDとかキーホルダーとか)

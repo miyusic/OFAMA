@@ -12,16 +12,16 @@
 
 
 </head>
-<h3 class="heading">ユーザー管理</h3>
+<h3 class="heading">ユーザー管理画面</h3>
 
 
 
-<div style="text-align:center">
+<div>
     <div class="table-responsive">
         <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th class="text-center">
@@ -56,11 +56,10 @@
                     }
                 </td>
                 <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">パスワードリセット</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">付与ロール確認</a> 
-                        <a asp-controller="Role" asp-action="EditRoleAssignment" asp-route-id="@item.Id" class="btn btn-info btn-sm">ロール付与</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a> 
-                       
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">パスワードリセット</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">付与ロール確認</a> 
+                    <a asp-controller="Role" asp-action="EditRoleAssignment" asp-route-id="@item.Id" class="btn btn-info btn-sm">ロール付与</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a> 
                 </td>
             </tr>
             

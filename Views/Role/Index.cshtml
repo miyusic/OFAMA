@@ -12,22 +12,26 @@
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
 
-<h3 class="heading">ロール管理</h3>
+<h3 class="heading">ロール管理画面</h3>
 
 <div class="buttons-container">
     <div>
-        <a asp-action="Create" class="btn btn-primary btn-lg">新規作成</a>
+        <p>
+        <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
+        </p>
     </div>
     <div>
+        <p>
         <a asp-action="UserWithRoles" class="btn btn-primary btn-lg">ロール付与</a>
+        </p>
     </div>
 </div>
 
 <div class="table-responsive">
     <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>

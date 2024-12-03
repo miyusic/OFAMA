@@ -10,7 +10,7 @@
     <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
-<h3 class="heading">備品管理</h3>
+<h3 class="heading">備品管理画面</h3>
 
 <!--エラーメッセージの表示-->
 @if (!ViewData.ModelState.IsValid)
@@ -25,11 +25,11 @@
 
 <div class="buttons-container">
     <div>
-        <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+        <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
         <div class="mb-3"></div>
         <form asp-controller="EquipmentManagers" asp-action="Index" method="get">
 
-            <input type="submit" value="リセット" class="btn btn-outline-primary btn-lg" />
+            <input type="submit" value="検索条件のリセット" class="btn btn-outline-primary btn-lg" />
 
         </form>
     </div>
@@ -80,20 +80,20 @@
 <div class="table-responsive">
     <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.EquipmentManagers[0].UserId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EquipmentManagers[0].EquipId)
+            <th class="text-center">
+                    @Html.DisplayNameFor(model => model.EquipmentManagers[0].EquipId)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.EquipmentManagers[0].Amount)
-            </th>
-            <th>
+            </th class="text-center">
+            <th  class="text-center">
                 @Html.DisplayNameFor(model => model.EquipmentManagers[0].Created_at)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.EquipmentManagers[0].Updated_at)
             </th>
             <th></th>
@@ -120,16 +120,16 @@
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Created_at)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Move" asp-route-id="@item.Id" class="btn btn-success btn-sm">Move</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
+                <a asp-action="Move" asp-route-id="@item.Id" class="btn btn-success btn-sm">移動</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
             </td>
         </tr>
 }

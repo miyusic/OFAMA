@@ -13,13 +13,13 @@
 
 
 </head>
-<h3 class="heading">商品名登録</h3>
+<h3 class="heading">商品データ一覧</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
     <form asp-controller="Merchandises" asp-action="Index" method="get">
         <p>
-            <input type="submit" value="リセット" class="btn btn-outline-primary btn-lg" />
+            <input type="submit" value="検索条件のリセット" class="btn btn-outline-primary btn-lg" />
         </p>
     </form>
 </p>
@@ -75,23 +75,23 @@
 <div class="table-responsive">
     <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th scope="col">
+        <tr class="table-secondary">
+            <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].ItemName)
             </th>
-            <th scope="col">
+            <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Price)
             </th>
-            <th scope="col">
+            <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Kind)
             </th>
-            <th scope="col">
+            <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Created_yaer)
             </th>
-            <th scope="col">
+             <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Created_at)
             </th>
-            <th scope="col">
+             <th scope="col" class="text-center">
                 @Html.DisplayNameFor(model => model.Merchandises[0].Updated_at)
             </th>
             <th></th>
@@ -104,25 +104,25 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ItemName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Price)円
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Kind)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Created_yaer)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Created_at)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Updated_at)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
                     <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
                 </td>
             </tr>
         }

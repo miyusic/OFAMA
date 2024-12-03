@@ -11,13 +11,13 @@
     <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
 </head>
 
-<h3 class="heading">立替管理</h3>
+<h3 class="heading">立替管理画面</h3>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
+    <a asp-action="Create" class="btn btn-primary btn-lg">新規データ登録</a>
     <form asp-controller="Borrows" asp-action="Index" method="get">
         <p>
-            <input type="submit" value="リセット" class="btn btn-outline-primary btn-lg" />
+            <input type="submit" value="検索条件のリセット" class="btn btn-outline-primary btn-lg" />
         </p>
     </form>
 </p>
@@ -97,26 +97,26 @@
 <div class="table-responsive">
     <table class="table table-hover" id="Table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-secondary">
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].Status)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].UserId)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].BorrowMoney)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].Usage)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].BorrowDate)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].ReturnDate)
             </th>
-            <th>
+                <th class="text-center">
                 @Html.DisplayNameFor(model => model.Borrows[0].Updated_at)
             </th>
             <th></th>
@@ -126,7 +126,7 @@
     <tbody>
 @foreach (var item in Model.Borrows) {
         <tr>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
@@ -137,24 +137,24 @@
                 }
                 @userName
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BorrowMoney)
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.BorrowMoney)円
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Usage)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.BorrowDate)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.ReturnDate)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Updated_at)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">編集</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">削除</a>
             </td>
             <td>
                 @if (item.Status != "済")
