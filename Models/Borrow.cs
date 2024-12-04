@@ -17,9 +17,10 @@ namespace OFAMA.Models
         [DisplayName("金額(円)")]
         public int BorrowMoney { get; set; } // 金額
         [Required(ErrorMessage = "用途は必須項目です")]
+        [StringLength(20, ErrorMessage = "用途は20文字以内である必要があります")]
         [DisplayName("用途")]
         public string Usage { get; set; } // 用途
-        [StringLength(20, ErrorMessage = "用途は20文字以内である必要があります")]
+        
         [Required(ErrorMessage = "立て替え日は必須項目です")]
         [DisplayName("立て替え日")]
         [DataType(DataType.Date)]

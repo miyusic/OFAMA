@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OFAMA.Data;
 using OFAMA.Models;
+using System.Diagnostics;
 
 namespace OFAMA.Controllers
 {
@@ -178,15 +179,18 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate,Updated_at")] Borrow borrow)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
         {
+            //Console.WriteLine("wwwww:here");
             if (id != borrow.Id)
             {
                 return NotFound();
             }
+            //Console.WriteLine("wwwww:here");
 
             if (ModelState.IsValid)
             {
+                //Console.WriteLine("wwwww:here");
                 try
                 {
                     borrow.Updated_at = DateTime.Now;
