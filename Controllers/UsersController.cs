@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using OFAMA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace OFAMA.Controllers
 {
@@ -323,22 +324,30 @@ namespace OFAMA.Controllers
                 return NotFound();
             }
 
-            /*
-            System.Console.WriteLine(id);
+            var model = new UserModel
+            {
+                Id = target.Id,
+                UserName = target.UserName,
+                Email = target.Email,
+                EmailConfirmed = target.EmailConfirmed,
+
+            };
+
             //ここから削除できるかの判定
             var error_flug = false;
             // EquipManagerにこの備品を用いている人がいないかを判定
             // 存在しなければ nullを返す
             var use_userid_equipdata = await _context.EquipmentManager
                 .FirstOrDefaultAsync(m => m.UserId == id);
-            
-            if(use_userid_equipdata != null)
+
+
+            if (use_userid_equipdata != null)
             {
                 //エラーメッセージを吐く
                 ModelState.AddModelError("use_equipid_data", "このユーザは備品管理で用いられています。");
                 error_flug = true;
             }
-            /*
+            
             // MerchandiseManagerにこの備品を用いている人がいないかを判定
             // 存在しなければ nullを返す
             var use_userid_merchdata = await _context.MerchandiseManager
@@ -379,9 +388,9 @@ namespace OFAMA.Controllers
             //エラーがある場合は削除せずに元の画面に戻す
             if (error_flug)
             {
-                return View(target);
+                return View(model);
             }
-            */
+            
 
             // ロールがアサインされているユーザーも以下の一行
             // で削除可能。内部で階層更新が行われているらしい。
@@ -399,7 +408,7 @@ namespace OFAMA.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            return View(target);
+            return View(model);
         }
         /*
         public async Task<IActionResult>Edit(string id)
