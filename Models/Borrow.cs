@@ -11,7 +11,8 @@ namespace OFAMA.Models
         [Required(ErrorMessage = "担当者名は必須項目です")]
         [DisplayName("担当者名")]
         public string UserId { get; set; } // ユーザID
-        [Range(0, 1000000, ErrorMessage = "金額は0円以上1,000,000円以下である必要があります。")]
+        [Range(1, 1000000, ErrorMessage = "金額は1円以上1,000,000円以下である必要があります。")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "金額は数字のみ入力してください。")]
         [Required(ErrorMessage = "金額は必須項目です")]
         [DisplayName("金額(円)")]
         public int BorrowMoney { get; set; } // 金額

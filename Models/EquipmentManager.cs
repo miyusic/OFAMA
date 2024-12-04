@@ -19,6 +19,7 @@ namespace OFAMA.Models
 
         [Range(1, 10000, ErrorMessage = "数量は1以上10,000以下である必要があります")]
         [Required(ErrorMessage = "数量は必須項目です")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "数量は数字のみ入力してください。")]
         [DisplayName("数量")]
         public int Amount { get; set; }
 
