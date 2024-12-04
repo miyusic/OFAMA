@@ -14,11 +14,13 @@ namespace OFAMA.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         //1.10追加
@@ -319,6 +321,65 @@ namespace OFAMA.Controllers
             if (target == null)
             {
                 return NotFound();
+            }
+
+            /*
+            System.Console.WriteLine(id);
+            //ここから削除できるかの判定
+            var error_flug = false;
+            // EquipManagerにこの備品を用いている人がいないかを判定
+            // 存在しなければ nullを返す
+            var use_userid_equipdata = await _context.EquipmentManager
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            
+            if(use_userid_equipdata != null)
+            {
+                //エラーメッセージを吐く
+                ModelState.AddModelError("use_equipid_data", "このユーザは備品管理で用いられています。");
+                error_flug = true;
+            }
+            /*
+            // MerchandiseManagerにこの備品を用いている人がいないかを判定
+            // 存在しなければ nullを返す
+            var use_userid_merchdata = await _context.MerchandiseManager
+                .FirstOrDefaultAsync(m => m.UserId == id);
+
+            if (use_userid_merchdata != null)
+            {
+                //エラーメッセージを吐く
+                ModelState.AddModelError("use_userid_merchdata", "このユーザは商品管理で用いられています。");
+                error_flug = true;
+            }
+
+            // Financesにこの備品を用いている人がいないかを判定
+            // 存在しなければ nullを返す
+            var use_userid_financedata = await _context.Finance
+                .FirstOrDefaultAsync(m => m.UserId == id);
+
+            if (use_userid_financedata != null)
+            {
+                //エラーメッセージを吐く
+                ModelState.AddModelError("use_userid_financedata", "このユーザは会計管理で用いられています。");
+                error_flug = true;
+            }
+
+            // Borrowにこの備品を用いている人がいないかを判定
+            // 存在しなければ nullを返す
+            var use_userid_borrowdata = await _context.Borrow
+                .FirstOrDefaultAsync(m => m.UserId == id);
+
+            if (use_userid_borrowdata != null)
+            {
+                //エラーメッセージを吐く
+                ModelState.AddModelError("use_userid_borrowdata", "このユーザは立替管理で用いられています。");
+                error_flug = true;
+            }
+            */
+
+            //エラーがある場合は削除せずに元の画面に戻す
+            if (error_flug)
+            {
+                return View(target);
             }
 
             // ロールがアサインされているユーザーも以下の一行

@@ -103,9 +103,16 @@
 @foreach (var item in Model.EquipmentManagers) {
             <tr><td>
             @{
+                string userName;
                 // EquipIdに対応するItemNameを取得する
                 //var userName = item.UserId;
-                var userName = ViewBag.UserDictionary[(item.UserId)];
+                if (ViewBag.UserDictionary.ContainsKey(item.UserId)){
+                    userName = ViewBag.UserDictionary[(item.UserId)].UserName;
+                }
+                else
+                {
+                    userName = "unknown user";
+                }
             }
             @userName
             <!--@Html.DisplayFor(modelItem => item.UserId)-->

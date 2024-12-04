@@ -6,9 +6,19 @@
 
 <h1 class="heading">ユーザ削除</h1>
 
+<!--エラーメッセージの表示-->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
 <h3>以下の内容を削除してもいいですか?</h3>
 <div>
-    <h4>UserModel</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
