@@ -315,6 +315,10 @@ namespace OFAMA.Controllers
                 .Where(user => user.Id == merchandiseManager.UserId)
                 .Select(user => user.UserName)
                 .FirstOrDefaultAsync();
+            if (username == null)
+            {
+                username = "不明なユーザー";
+            }
             ViewBag.UserName = username;
 
             //Item名を取得
@@ -322,6 +326,10 @@ namespace OFAMA.Controllers
                 .Where(user => user.Id == merchandiseManager.MerchId)
                 .Select(m => m.ItemName)
                 .FirstOrDefaultAsync();
+            if (merchname == null)
+            {
+                merchname = "不明なアイテム";
+            }
             ViewBag.MerchName = merchname;
 
             return View(merchandiseManager);
@@ -440,6 +448,10 @@ namespace OFAMA.Controllers
                     .Where(user => user.Id == merchManager.UserId)
                     .Select(user => user.UserName)
                     .FirstOrDefaultAsync();
+                if (username == null)
+                {
+                    username = "不明なユーザー";
+                }
                 ViewBag.UserName = username;
 
                 //Item名を取得
@@ -447,6 +459,10 @@ namespace OFAMA.Controllers
                     .Where(user => user.Id == merchManager.MerchId)
                     .Select(m => m.ItemName)
                     .FirstOrDefaultAsync();
+                if (merchname == null)
+                {
+                    merchname = "不明なアイテム";
+                }
                 ViewBag.MerchName = merchname;
 
                 //その他情報をviewBagに格納

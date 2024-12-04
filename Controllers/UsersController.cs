@@ -374,13 +374,14 @@ namespace OFAMA.Controllers
                 ModelState.AddModelError("use_userid_borrowdata", "このユーザは立替管理で用いられています。");
                 error_flug = true;
             }
-            */
+            
 
             //エラーがある場合は削除せずに元の画面に戻す
             if (error_flug)
             {
                 return View(target);
             }
+            */
 
             // ロールがアサインされているユーザーも以下の一行
             // で削除可能。内部で階層更新が行われているらしい。

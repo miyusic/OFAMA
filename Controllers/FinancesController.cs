@@ -291,11 +291,25 @@ namespace OFAMA.Controllers
             {
                 return NotFound();
             }
-            ViewBag.instiName = await _context.Institution
+            var institutionName = await _context.Institution
                                 .Where(m => m.Id == finance.InstiId)
                                 .Select(m => m.Name)
                                 .FirstOrDefaultAsync();
-            ViewBag.userName = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == finance.UserId);
+            if (institutionName == null)
+            {
+                institutionName = "不明な機関";
+            }
+            ViewBag.instiName = institutionName;
+
+            var username = await _userManager.Users
+                .Where(user => user.Id == finance.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync(); 
+            if (username == null)
+            {
+                username = "不明なユーザー";
+            }
+            ViewBag.userName = username;
             return View(finance);
         }
 

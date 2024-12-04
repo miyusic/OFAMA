@@ -111,7 +111,7 @@
                 }
                 else
                 {
-                    userName = "unknown user";
+                    userName = "不明なユーザー";
                 }
             }
             @userName
@@ -119,8 +119,16 @@
             </td>
             <td>
             @{
+                string itemName;
                 // EquipIdに対応するItemNameを取得する
-                var itemName = ViewBag.EquipDictionary[item.EquipId];
+                //var userName = item.UserId;
+                if (ViewBag.EquipDictionary.ContainsKey(item.EquipId)){
+                    itemName = ViewBag.EquipDictionary[(item.EquipId)];
+                }
+                else
+                {
+                    itemName = "不明なアイテム";
+                }
             }
             @itemName
             </td>

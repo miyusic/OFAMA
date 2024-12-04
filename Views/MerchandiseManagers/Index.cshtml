@@ -101,7 +101,7 @@
                     }
                     else
                     {
-                        userName = "unknown user";
+                        userName = "不明なユーザー";
                     }
                 }
                 @userName
@@ -109,8 +109,16 @@
             </td>
             <td>
                 @{
+                    string itemName;
                     // MerchIdに対応するItemNameを取得する
-                    var itemName = ViewBag.MerchDictionary[item.MerchId];
+                    
+                    if (ViewBag.MerchDictionary.ContainsKey(item.MerchId)){
+                        itemName = ViewBag.MerchDictionary[item.MerchId];
+                    }
+                    else
+                    {
+                        itemName = "不明なアイテム";
+                    }
                 }
                 @itemName
                 <!--@Html.DisplayFor(modelItem => item.MerchId)-->

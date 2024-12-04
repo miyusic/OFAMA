@@ -238,7 +238,15 @@ namespace OFAMA.Controllers
             {
                 return Forbid();
             }
-            ViewBag.userName = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == borrow.UserId);
+            var username = await _userManager.Users
+                .Where(user => user.Id == borrow.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            if (username == null)
+            {
+                username = "不明なユーザー";
+            }
+            ViewBag.userName = username;
 
             return View(borrow);
         }
@@ -278,7 +286,15 @@ namespace OFAMA.Controllers
             {
                 return NotFound();
             }
-            ViewBag.userName = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == borrow.UserId);
+            var username = await _userManager.Users
+                .Where(user => user.Id == borrow.UserId)
+                .Select(user => user.UserName)
+                .FirstOrDefaultAsync();
+            if (username == null)
+            {
+                username = "不明なユーザー";
+            }
+            ViewBag.userName = username;
             return View(borrow);
         }
 

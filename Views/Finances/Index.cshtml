@@ -153,7 +153,7 @@
                         }
                         else
                         {
-                            userName = "unknown user";
+                            userName = "不明なユーザー";
                         }
                     }
                     @userName
@@ -167,7 +167,14 @@
                 <td class="text-center">
                     @{
                         // 対応するItemNameを取得する
-                        var instiName = ViewBag.InstitutionDictionary[(item.InstiId)];
+                        string instiName ;
+                        if (ViewBag.InstitutionDictionary.ContainsKey(item.InstiId)){
+                            instiName = ViewBag.InstitutionDictionary[(item.InstiId)];
+                        }
+                        else
+                        {
+                            instiName = "不明な機関";
+                        }
                     }
                     @instiName
                 </td>
