@@ -19,7 +19,7 @@ namespace OFAMA.Models
         //種別のプルダウンメニュー用(消耗品か消耗品でない)
         [Required(ErrorMessage = "備品種別は必須項目です")]
         [DisplayName("消耗品")]
-        public Boolean isExpandable { get; set; }
+        public Boolean IsExpandable { get; set; }
 
         [Required(ErrorMessage = "登録日は必須項目です")]
         [DisplayName("登録日")]

@@ -38,7 +38,7 @@
 
                     <div><input type="text" asp-for="SearchString" /></div>
                     <div>
-                        @Html.DisplayFor(model => model.Equipments[0].isExpandable)
+                        @Html.DisplayFor(model => model.Equipments[0].IsExpandable)
                     </div>
                     <div><select asp-for="SearchExpandableString" asp-items="Model.Expandables"> <option value="">全て</option> </select></div>
 
@@ -48,7 +48,7 @@
 
             </section>
         </li>
-
+    </ul>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"
                 integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
                 crossorigin="anonymous"></script>
@@ -65,7 +65,7 @@
                 @Html.DisplayNameFor(model => model.Equipments[0].ItemName)
             </th>
                 <th class="text-center">
-                @Html.DisplayNameFor(model => model.Equipments[0].isExpandable)
+                @Html.DisplayNameFor(model => model.Equipments[0].IsExpandable)
             </th>
                 <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipments[0].Created_at)
@@ -83,7 +83,7 @@
                 @Html.DisplayFor(modelItem => item.ItemName)
             </td>
             <td class="text-center">
-                @Html.DisplayFor(modelItem => item.isExpandable)
+                @Html.DisplayFor(modelItem => item.IsExpandable)
             </td>
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Created_at)

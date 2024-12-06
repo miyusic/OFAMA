@@ -29,7 +29,7 @@ namespace OFAMA.Controllers
             var equips = _context.Equipment.Select(m => m);
 
             //テーブルから消耗品かどうかを取得する
-            //var expandables = _context.Equipment.Select(m => m.isExpandable);
+            //var expandables = _context.Equipment.Select(m => m.IsExpandable);
 
             //備品名検索
             if (!string.IsNullOrEmpty(searchString))
@@ -45,12 +45,12 @@ namespace OFAMA.Controllers
                 if (searchExpandableString.Equals("消耗品"))
                 {
                     //消耗品のとき
-                    equips = equips.Where(s => s.isExpandable!.Equals(true));
+                    equips = equips.Where(s => s.IsExpandable!.Equals(true));
                 }
                 else if (searchExpandableString.Equals("消耗品ではない"))
                 {
                     //消耗品ではないとき
-                    equips = equips.Where(s => s.isExpandable!.Equals(false));
+                    equips = equips.Where(s => s.IsExpandable!.Equals(false));
                 }
             }
 
@@ -107,7 +107,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Equip_CED, Admin_Dev")]
-        public async Task<IActionResult> Create([Bind("Id,ItemName,isExpandable")] Equipment equipment)
+        public async Task<IActionResult> Create([Bind("Id,ItemName,IsExpandable")] Equipment equipment)
         {
             if (ModelState.IsValid)
             {
@@ -157,7 +157,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "Equip_CED, Admin_Dev")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,isExpandable","Created_at")] Equipment equipment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,IsExpandable", "Created_at")] Equipment equipment)
         {
             if (id != equipment.Id)
             {
@@ -171,8 +171,7 @@ namespace OFAMA.Controllers
                     //名前と消耗品のフラグが一致するItemのレコードを取得
                     var equipdata = await _context.Equipment
                         .AsNoTracking()
-                        .FirstOrDefaultAsync(m => m.ItemName == equipment.ItemName && m.isExpandable == equipment.isExpandable);
-
+                        .FirstOrDefaultAsync(m => m.ItemName == equipment.ItemName && m.IsExpandable == equipment.IsExpandable);
                     if (equipdata == null)
                     {
                         //名前が同じモノがあるかを取得
@@ -186,7 +185,7 @@ namespace OFAMA.Controllers
                         .FirstOrDefaultAsync(m => m.Id == equipment.Id);
 
                         //名前が異なる or //名前は同じだけど消耗品のフラグが違う
-                        if ((equipname == null) || ((equipcurrentid.ItemName == equipment.ItemName) && (equipcurrentid.isExpandable != equipment.isExpandable)))
+                        if ((equipname == null) || ((equipcurrentid.ItemName == equipment.ItemName) && (equipcurrentid.IsExpandable != equipment.IsExpandable)))
                         {
                             //異なる名前or消耗品のフラグなのでOK
                             var update_date = DateTime.Now;
