@@ -38,7 +38,7 @@
 
                     <div><input type="text" asp-for="SearchString" /></div>
                     <div>
-                        @Html.DisplayFor(model => model.Equipments[0].IsExpandable)
+                        @Html.DisplayNameFor(model => model.Equipments[0].IsExpandable)
                     </div>
                     <div><select asp-for="SearchExpandableString" asp-items="Model.Expandables"> <option value="">全て</option> </select></div>
 
