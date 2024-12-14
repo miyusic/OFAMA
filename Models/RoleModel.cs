@@ -11,7 +11,7 @@ namespace OFAMA.Models
           100,
           ErrorMessage = "{0} は {2} 文字以上",
           MinimumLength = 3)]
-        [RegularExpression(@"[a-zA-Z]+", ErrorMessage = "半角英字のみで構成された名前を入力してください")]
+        [RegularExpression(@"[a-zA-Z -/:-@[-`{-~]+", ErrorMessage = "半角英字記号のみで構成された名前を入力してください")]
         [Display(Name = "ロール名")]
         public string Name { get; set; }
     }

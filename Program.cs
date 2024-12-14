@@ -28,10 +28,33 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 //追記
 builder.Services.AddRazorPages();
+//追記1214
+builder.Services.AddControllers();
+//
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+//追記1214
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await DbInitializer.InitializeRolesAndAdminUserAsync(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        // ログ出力やエラー処理
+        Console.WriteLine($"Error initializing roles and users: {ex.Message}");
+    }
+}
+
+////////////////
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

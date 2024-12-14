@@ -27,6 +27,7 @@ namespace OFAMA.Models
 
         //機関
         [Required(ErrorMessage = "用途は必須項目です")]
+        [StringLength(20, ErrorMessage = "用途は20文字以内である必要があります")]
         [DisplayName("用途")]
         public string Way { get; set; }
         //用途

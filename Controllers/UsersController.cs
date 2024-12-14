@@ -77,7 +77,7 @@ namespace OFAMA.Controllers
         //Get:Users/Details/5
         //もともとはDetails(int ? id)だった
         //[Authorize(Roles = "Role_View")]
-        //[Authorize(Roles = "Role_ADet, Admin_Dev")]
+        [Authorize(Roles = "Role_ADet, Admin_Dev")]
 
         public async Task<IActionResult> Details(string? id)
         {
@@ -154,7 +154,7 @@ namespace OFAMA.Controllers
         }
         */
         //[Authorize(Roles = "User_PasswordChange")]
-        //[Authorize(Roles = "Password_Reset, Admin_Dev")]
+        [Authorize(Roles = "Password_Reset, Admin_Dev")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -185,7 +185,7 @@ namespace OFAMA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "User_PasswordChange")]
-        //[Authorize(Roles = "Password_Reset, Admin_Dev")]
+        [Authorize(Roles = "Password_Reset, Admin_Dev")]
         public async Task<IActionResult> Edit(
             string id,
             string Password)
@@ -275,7 +275,7 @@ namespace OFAMA.Controllers
         // 階層更新が行われているようでロールがアサインされている
         // ユーザーも削除可
         //[Authorize(Roles = "User_Delete")]
-        //[Authorize(Roles = "User_Delete, Admin_Dev")]
+        [Authorize(Roles = "User_Delete, Admin_Dev")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -309,7 +309,7 @@ namespace OFAMA.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = "User_Delete")]
-        //[Authorize(Roles = "User_Delete, Admin_Dev")]
+        [Authorize(Roles = "User_Delete, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (id == null)
