@@ -143,6 +143,25 @@ namespace OFAMA.Areas.Identity.Pages.Account
         //1011
         public async Task<IActionResult> RegisterRole(string id)
         {
+            // 必要なロールを登録
+            string[] _roles_list = {
+                "EquipMng_View",
+                "EquipMng_CEMD",
+                "Equip_View",
+                "Equip_CED",
+                "MerchMng_View",
+                "MerchMng_CEMD",
+                "Merch_View",
+                "Merch_CED",
+                "Finance_View",
+                "Borrow_View",
+                "Borrow_CED",
+                "User_View"};
+
+            // 配列をリストに変換
+            List<string> roles_list = _roles_list.ToList();
+
+
             if (id == null)
             {
                 return NotFound();
@@ -179,33 +198,34 @@ namespace OFAMA.Areas.Identity.Pages.Account
             {
                 Microsoft.AspNetCore.Identity.IdentityResult result;
 
+                //存在確認
+                foreach (var _role in roles_list)
+                {
+                    //もしなければ、削除
+                    if (!await _roleManager.RoleExistsAsync(_role))
+                    {
+                        roles_list.Remove(_role);
+                    }
+                }
 
+                //ユーザに付与されているかの確認
                 foreach (RoleInfo roleInfo in model.UserRoles)
                 {
-                    Console.WriteLine(roleInfo.RoleName);
-                    if (roleInfo.RoleName == "Keyword")
+                    foreach (var _role in roles_list)
                     {
-                        // id のユーザーが roleInfo.RoleName のロールに属して
-                        // いるか否か。以下でその情報が必要。
-                        bool isInRole = await _userManager.
-                                        IsInRoleAsync(user, roleInfo.RoleName);
-                        if (isInRole == false)
+                        //Console.WriteLine(roleInfo.RoleName);
+                        if (roleInfo.RoleName == _role)
                         {
-                            result = await _userManager.AddToRoleAsync(user, roleInfo.RoleName);
-                        }
+                            // id のユーザーが roleInfo.RoleName のロールに属して
+                            // いるか否か。以下でその情報が必要。
+                            bool isInRole = await _userManager.
+                                            IsInRoleAsync(user, roleInfo.RoleName);
+                            if (isInRole == false)
+                            {
+                                result = await _userManager.AddToRoleAsync(user, roleInfo.RoleName);
+                            }
 
-                    }
-                    if (roleInfo.RoleName == "Role_Assign")
-                    {
-                        // id のユーザーが roleInfo.RoleName のロールに属して
-                        // いるか否か。以下でその情報が必要。
-                        bool isInRole = await _userManager.
-                                        IsInRoleAsync(user, roleInfo.RoleName);
-                        if (isInRole == false)
-                        {
-                            result = await _userManager.AddToRoleAsync(user, roleInfo.RoleName);
                         }
-
                     }
                 }
 

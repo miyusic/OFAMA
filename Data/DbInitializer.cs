@@ -24,7 +24,29 @@ namespace OFAMA.Data
             RoleManager<IdentityRole> roleManager)
         {
             // 必要なロールを登録
-            string[] roles = { "Test", "Admin" };
+            string[] roles = { 
+                "Admin_Dev",
+                "EquipMng_View",
+                "EquipMng_CEMD",
+                "Equip_View",
+                "Equip_CED",
+                "MerchMng_View",
+                "MerchMng_CEMD",
+                "Merch_View",
+                "Merch_CED",
+                "Finance_View",
+                "Finance_CED",
+                "Institution_View",
+                "Institution_CED",
+                "Borrow_View",
+                "Borrow_CED",
+                "Borrow_Return",
+                "User_View",
+                "Password_Reset",
+                "User_Delete",
+                "Role_ADet",
+                "Role_VCED",
+                "Keyword_All"};
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -49,7 +71,7 @@ namespace OFAMA.Data
                 var result = await userManager.CreateAsync(adminUser, adminPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                    await userManager.AddToRoleAsync(adminUser, "Admin_Dev");
                 }
             }
         }
