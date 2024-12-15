@@ -21,7 +21,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Merchandises
-        //[Authorize(Roles = "Merch_View, Admin_Dev")]
+        [Authorize(Roles = "Merch_View, Admin_Dev")]
         public async Task<IActionResult> Index(string searchString,string merchKind,string merchYear)
         {
             //テーブルから全てのデータを取得するLINQクエリ
@@ -88,7 +88,7 @@ namespace OFAMA.Controllers
         */
 
         // GET: Merchandises/Create
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public IActionResult Create()
         {
             return View();
@@ -99,7 +99,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,ItemName,Price,Kind,Created_yaer")] Merchandise merchandise)
         {
             if (ModelState.IsValid)
@@ -128,7 +128,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Merchandises/Edit/5
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Merchandise == null)
@@ -149,7 +149,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,Price,Kind,Created_yaer,Created_at")] Merchandise merchandise)
         {
             if (id != merchandise.Id)
@@ -163,7 +163,13 @@ namespace OFAMA.Controllers
                 {
                     //名前が一致するItemのレコードを取得
                     var merchname = await _context.Merchandise
+                        .AsNoTracking() // トラッキングを無効化
                         .FirstOrDefaultAsync(m => m.ItemName == merchandise.ItemName);
+
+                    if ((merchname!=null) && (merchname.Kind != merchandise.Kind || merchname.Price != merchandise.Price))
+                    {
+                        merchname = null;
+                    }
 
                     if (merchname == null)
                     {
@@ -195,7 +201,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Merchandises/Delete/5
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Merchandise == null)
@@ -219,7 +225,7 @@ namespace OFAMA.Controllers
         // POST: Merchandises/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Merch_CED, Admin_Dev")]
+        [Authorize(Roles = "Merch_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Merchandise == null)

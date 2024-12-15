@@ -28,7 +28,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows
-        //[Authorize(Roles = "Borrow_View, Admin_Dev")]
+        [Authorize(Roles = "Borrow_View, Admin_Dev")]
         public async Task<IActionResult> Index(
             string borrowStatus,
             string searchString,
@@ -108,7 +108,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Create
-        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
+        [Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public IActionResult Create()
         {
             //ユーザリスト
@@ -124,7 +124,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
+        [Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate")] Borrow borrow)
         {
             if (ModelState.IsValid)
@@ -178,7 +178,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
+        [Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
         {
             //Console.WriteLine("wwwww:here");
@@ -214,7 +214,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Delete/5
-        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
+        [Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             //ログインしていない場合
@@ -258,7 +258,7 @@ namespace OFAMA.Controllers
         // POST: Borrows/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Borrow_CED, Admin_Dev")]
+        [Authorize(Roles = "Borrow_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Borrow == null)
@@ -276,7 +276,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Borrows/Return/5
-        //[Authorize(Roles = "Borrow_Return, Admin_Dev")]
+        [Authorize(Roles = "Borrow_Return, Admin_Dev")]
         public async Task<IActionResult> Return(int? id)
         {
 
@@ -305,7 +305,7 @@ namespace OFAMA.Controllers
         // POST: Borrows/Return/5
         [HttpPost, ActionName("Return")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Borrow_Return, Admin_Dev")]
+        [Authorize(Roles = "Borrow_Return, Admin_Dev")]
         public async Task<IActionResult> ReturnConfirmed(int id, DateTime? returnDate, [Bind("Id,Status,UserId,BorrowMoney,Usage,BorrowDate,ReturnDate")] Borrow borrow)
         {
             if (_context.Borrow == null)

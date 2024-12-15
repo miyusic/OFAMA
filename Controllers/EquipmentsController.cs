@@ -22,7 +22,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Equipments
-        //[Authorize(Roles = "Equip_View, Admin_Dev")]
+        [Authorize(Roles = "Equip_View, Admin_Dev")]
         public async Task<IActionResult> Index(string searchExpandableString, string searchString)
         {
             //テーブルから全てのデータを取得するLINQクエリ
@@ -94,7 +94,7 @@ namespace OFAMA.Controllers
         */
 
         // GET: Equipments/Create
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
 
         public IActionResult Create()
         {
@@ -106,7 +106,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
         public async Task<IActionResult> Create([Bind("Id,ItemName,IsExpandable")] Equipment equipment)
         {
             if (ModelState.IsValid)
@@ -135,7 +135,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Equipments/Edit/5
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Equipment == null)
@@ -156,7 +156,7 @@ namespace OFAMA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,IsExpandable", "Created_at")] Equipment equipment)
         {
             if (id != equipment.Id)
@@ -222,7 +222,7 @@ namespace OFAMA.Controllers
         }
 
         // GET: Equipments/Delete/5
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Equipment == null)
@@ -244,7 +244,7 @@ namespace OFAMA.Controllers
         // POST: Equipments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Equip_CED, Admin_Dev")]
+        [Authorize(Roles = "Equip_CED, Admin_Dev")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Equipment == null)

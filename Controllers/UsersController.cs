@@ -26,7 +26,7 @@ namespace OFAMA.Controllers
 
         //1.10追加
         //Get
-        //[Authorize(Roles = "User_View, Admin_Dev")]
+        [Authorize(Roles = "User_View, Admin_Dev")]
         public async Task<IActionResult> Index()
         {
             var model = new List<UserViewModel>();
