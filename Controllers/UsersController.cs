@@ -383,6 +383,14 @@ namespace OFAMA.Controllers
                 ModelState.AddModelError("use_userid_borrowdata", "このユーザは立替管理で用いられています。");
                 error_flug = true;
             }
+
+            //adminは消せない
+            if (model.UserName == "admin@example.com")
+            {
+                //エラーメッセージを吐く
+                ModelState.AddModelError("model.UserName", "管理者は削除できません。");
+                error_flug = true;
+            }
             
 
             //エラーがある場合は削除せずに元の画面に戻す

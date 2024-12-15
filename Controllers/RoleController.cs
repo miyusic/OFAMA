@@ -139,6 +139,12 @@ namespace OFAMA.Controllers
 
                 // ユーザーが入力したロール名を model.Name から取得し
                 // て IdentityRole の Name を書き換え
+                if (target.Name == "Admin_Dev")
+                {
+                    ModelState.AddModelError("target.Name","Admin_Devは変更できません");
+                    // 更新に失敗した場合、編集画面を再描画
+                    return View(model);
+                }
                 target.Name = model.Name;
 
                 // Name を書き換えた IdentityRole で更新をかける
@@ -213,24 +219,33 @@ namespace OFAMA.Controllers
                 return NotFound();
             }
 
-            // ユーザーがアサインされているロールも以下の一行で
-            // 削除可能。内部で階層更新が行われているらしい。
-            var result = await _roleManager.DeleteAsync(role);
-
-            if (result.Succeeded)
+            // Admin_Devは消せない
+            if (role.Name != "Admin_Dev")
             {
-                // 削除に成功したら Role/Index にリダイレクト
-                return RedirectToAction("Index", "Role");
+                // ユーザーがアサインされているロールも以下の一行で
+                // 削除可能。内部で階層更新が行われているらしい。
+                var result = await _roleManager.DeleteAsync(role);
+
+                if (result.Succeeded)
+                {
+                    // 削除に成功したら Role/Index にリダイレクト
+                    return RedirectToAction("Index", "Role");
+                }
+
+                // result.Succeeded が false の場合 ModelSate にエ
+                // ラー情報を追加しないとエラーメッセージが出ない。
+                // Register.cshtml.cs のものをコピー
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty,
+                                             error.Description);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Admin_Devは削除できません");
             }
 
-            // result.Succeeded が false の場合 ModelSate にエ
-            // ラー情報を追加しないとエラーメッセージが出ない。
-            // Register.cshtml.cs のものをコピー
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty,
-                                         error.Description);
-            }
             // 削除に失敗した場合、削除画面を再描画
             var model = new RoleModel
             {
@@ -351,6 +366,14 @@ namespace OFAMA.Controllers
             if (user == null)
             {
                 return NotFound();
+            }
+
+            //adminは変更出来ない
+            if (user.UserName == "admin@example.com")
+            {
+                ModelState.AddModelError("user.UserName", "管理者は変更できません");
+                // 編集に失敗した場合、編集画面を再描画
+                return View(model);
             }
 
             if (ModelState.IsValid)
