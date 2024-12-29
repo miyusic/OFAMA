@@ -1,20 +1,20 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 /*ここから追加*/
@@ -56,7 +56,7 @@ body {
 .accordionbox .button-container .btn {
     width: auto;
     padding: 5px 10px;
-    margin: 0 5px; /* ボタン間の余白を設定 */
+    margin: 5px; /* ボタン間の余白を設定 */
 }
 
 /* 横スクロールバーを常に表示するための追加スタイル */
@@ -76,4 +76,49 @@ body {
 
 .text-right {
     text-align: right;
+}
+
+
+.homemenu {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.menu-item {
+    border: 1px solid #bfb8b8;
+    padding: 1.25rem;
+    width: 100%;
+    text-align: center;
+    cursor: pointer; /* カーソルを「クリック可能」に変更 */
+    border-radius: 5px; /* 角を丸める */
+    text-decoration: none; /* 下線を非表示 */
+    font-size: 1.5rem; /* 文字サイズを大きく */
+    color: #000; /* 文字色を黒に */
+}
+
+
+    .menu-item:hover {
+        background-color: #e0e0e0;
+        color: #000;
+    }
+
+@media (max-width: 768px) {
+    .login-container {
+        display: flex;
+        justify-content: flex-end; /* 右寄せに変更 */
+    }
+
+        .login-container .btn {
+            margin-right: 10px; /* ボタン間の隙間を追加 */
+        }
+}
+
+@media (min-width: 767px) {
+    .login-container {
+        display: none;
+    }
 }

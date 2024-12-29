@@ -1,7 +1,36 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--==============レイアウトを制御する独自のCSSを読み込み===============-->
+    <link rel="stylesheet" type="text/css" href="~/css/acordionpanel.css" />
+</head>
 
-<div class="text-center">
-    <h1 class="heading">Welcome</h1>
-</div>
+<body>
+    <h1>Home</h1>
+    <div class="login-container">
+
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg">登録</a>
+
+
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg">ログイン</a>
+
+    </div>
+    <div class="homemenu">
+
+
+        <a asp-area="" asp-controller="EquipmentManagers" asp-action="Index" class="menu-item">備品管理</a>
+        <a asp-area="" asp-controller="Equipments" asp-action="Index" class="menu-item">備品名登録</a>
+        <a asp-area="" asp-controller="Merchandisemanagers" asp-action="Index" class="menu-item">商品管理</a>
+        <a asp-area="" asp-controller="Merchandises" asp-action="Index" class="menu-item">商品名登録</a>
+        <a asp-area="" asp-controller="Finances" asp-action="Index" class="menu-item">会計管理</a>
+        <a asp-area="" asp-controller="Institutions" asp-action="Index" class="menu-item">支払機関登録</a>
+        <a asp-area="" asp-controller="Borrows" asp-action="Index" class="menu-item">立替管理</a>
+        <a asp-area="" asp-controller="Users" asp-action="Index" class="menu-item">ユーザー管理</a>
+        <a asp-area="" asp-controller="Role" asp-action="Index" class="menu-item">ロール管理</a>
+        <a asp-area="" asp-controller="Keywords" asp-action="Index" class="menu-item">キーワード</a>
+
+    </div>
+</body>

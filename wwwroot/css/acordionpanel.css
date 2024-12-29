@@ -115,3 +115,9 @@ tr.total-row {
     /*コレ*/ border-top: 2px solid #333 !important;
     /*コレ*/ border-bottom: 1px solid #333 !important;
 }
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
