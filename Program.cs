@@ -30,10 +30,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddRazorPages();
 //追記1214
 builder.Services.AddControllers();
+//追加
 //
-
 builder.Services.AddControllersWithViews();
-
+//
 var app = builder.Build();
 
 //追記1214
