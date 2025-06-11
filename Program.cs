@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+//
 //追記
 // SendMailParams を構成ファイルから読み込むよう設定
 builder.Services.Configure<SendMailParams>(builder.Configuration.GetSection("SendMailParams"));
